@@ -41,7 +41,9 @@
       "Bash(curl -s --max-time 5 -o /dev/null -w \"login HTTP %{http_code} in %{time_total}s\\\\n\" \"http://127.0.0.1:8000/login\")",
       "Bash(echo \"curl failed/timeout \\(exit $?\\)\")",
       "Bash(curl -s --max-time 20 -o /dev/null -w \"GET /images/logo.png -> HTTP %{http_code} \\(%{size_download} bytes\\)\\\\n\" \"http://127.0.0.1:8000/images/logo.png\")",
-      "Bash(curl -s --max-time 30 \"http://127.0.0.1:8000/login\")"
+      "Bash(curl -s --max-time 30 \"http://127.0.0.1:8000/login\")",
+      "Bash(php artisan *)",
+      "Bash(e:/xampp/php/php.exe artisan *)"
     ]
   }
 }

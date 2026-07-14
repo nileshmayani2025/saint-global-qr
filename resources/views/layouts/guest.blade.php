@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Welcome') · {{ config('app.name') }}</title>
-    <link rel="icon" href="/images/logo.png">
+    <link rel="icon" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     @include('partials.theme')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -15,7 +15,7 @@
          style="background:radial-gradient(760px 460px at 50% -10%, rgba(44,160,212,.18), transparent 60%), radial-gradient(600px 380px at 50% 120%, rgba(217,178,95,.08), transparent 60%);">
         <div class="w-full max-w-md lux-rise">
             <div class="text-center mb-7">
-                <img src="/images/logo.png" alt="Saint Globe" class="w-20 h-20 mx-auto rounded-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl">
+                <img src="{{ asset('images/logo.png') }}" alt="Saint Globe" class="w-20 h-20 mx-auto rounded-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl">
                 <div class="mt-3 font-display font-bold text-xl">Saint Globe</div>
                 <div class="text-xs text-[var(--muted)]">A Construction Chemicals</div>
             </div>

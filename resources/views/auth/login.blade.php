@@ -27,12 +27,4 @@
     <p class="mt-6 text-sm text-center text-slate-500 dark:text-slate-400">
         No account? <a href="{{ route('register') }}" class="text-brand-600 font-medium hover:underline">Create one</a>
     </p>
-
-    <div class="mt-8 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 text-sm">
-        <p class="font-medium mb-2">Demo credentials</p>
-        <ul class="space-y-1 text-slate-500 dark:text-slate-400">
-            <li>Super Admin — <code>admin@test</code> / <code>password</code></li>
-            <li>Company — <code>company@test</code> / <code>password</code></li>
-        </ul>
-    </div>
 @endsection
