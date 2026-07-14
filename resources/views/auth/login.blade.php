@@ -2,9 +2,8 @@
 @section('title', 'Sign in')
 
 @section('content')
-    <img src="/images/logo.png" alt="Saint Globe" class="lg:hidden w-16 h-16 rounded-2xl shadow-md mb-5">
-    <h1 class="text-2xl font-bold">Welcome back</h1>
-    <p class="text-slate-500 dark:text-slate-400 mt-1">Sign in to your Saint Globe account.</p>
+    <h1 class="font-display text-2xl font-bold">Welcome back</h1>
+    <p class="text-[var(--muted)] mt-1">Sign in to your Saint Globe account.</p>
 
     <form method="POST" action="{{ route('login') }}" class="mt-8 space-y-5">
         @csrf

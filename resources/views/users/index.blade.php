@@ -48,15 +48,19 @@
                                     <span class="text-amber-600 text-xs font-medium">Pending</span>
                                 @endif
                             </td>
-                            <td class="px-4 py-3 text-right whitespace-nowrap">
-                                @can('users.update')
-                                    @if ($user->isApproved())
-                                        <form method="POST" action="{{ route('users.revoke-approval', $user) }}" class="inline">@csrf<button class="text-amber-600 hover:underline text-xs">Revoke</button></form>
-                                    @else
-                                        <form method="POST" action="{{ route('users.approve', $user) }}" class="inline">@csrf<button class="text-emerald-600 hover:underline text-xs">Approve</button></form>
-                                    @endif
-                                    <a href="{{ route('users.edit', $user) }}" class="ml-3 text-brand-600 hover:underline">Edit</a>
-                                @endcan
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    @can('users.update')
+                                        @if ($user->isApproved())
+                                            <form method="POST" action="{{ route('users.revoke-approval', $user) }}" class="inline-flex">@csrf<button title="Revoke scanning access" class="px-2.5 h-9 inline-flex items-center rounded-lg text-xs font-semibold text-amber-600 border border-amber-500/30 hover:bg-amber-500/10">Revoke</button></form>
+                                        @else
+                                            <form method="POST" action="{{ route('users.approve', $user) }}" class="inline-flex">@csrf<button title="Approve" class="px-2.5 h-9 inline-flex items-center rounded-lg text-xs font-semibold text-emerald-600 border border-emerald-500/30 hover:bg-emerald-500/10">Approve</button></form>
+                                        @endif
+                                    @endcan
+                                    <x-act.view :href="route('users.show', $user)" />
+                                    @can('users.update')<x-act.edit :href="route('users.edit', $user)" />@endcan
+                                    @can('users.delete')<x-act.delete :action="route('users.destroy', $user)" confirm="Delete this user?" />@endcan
+                                </div>
                             </td>
                         </tr>
                     @empty

@@ -36,9 +36,11 @@
                             <td class="px-4 py-3">{{ number_format($batch->quantity) }}</td>
                             <td class="px-4 py-3">{{ number_format($batch->qr_generated) }}</td>
                             <td class="px-4 py-3"><x-badge :status="$batch->status" /></td>
-                            <td class="px-4 py-3 text-right whitespace-nowrap">
-                                <a href="{{ route('batches.show', $batch) }}" class="text-brand-600 hover:underline">View</a>
-                                @can('batches.update')<a href="{{ route('batches.edit', $batch) }}" class="ml-3 text-slate-500 hover:underline">Edit</a>@endcan
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    <x-act.view :href="route('batches.show', $batch)" />
+                                    @can('batches.update')<x-act.edit :href="route('batches.edit', $batch)" />@endcan
+                                </div>
                             </td>
                         </tr>
                     @empty

@@ -3,9 +3,8 @@
 
 @section('content')
     <div class="text-center">
-        <img src="/images/logo.png" alt="Saint Globe" class="w-16 h-16 mx-auto rounded-2xl shadow-md">
-        <h1 class="mt-4 text-2xl font-bold">Verify your product</h1>
-        <p class="text-slate-500 dark:text-slate-400 mt-1">Enter the code printed on the QR label to check authenticity.</p>
+        <h1 class="font-display text-2xl font-bold">Verify your product</h1>
+        <p class="text-[var(--muted)] mt-1">Enter the code printed on the QR label to check authenticity.</p>
     </div>
 
     <form method="POST" action="{{ route('verify.submit') }}" class="mt-8 space-y-4">

@@ -116,11 +116,12 @@
             </div>
         </header>
 
-        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto lux-rise">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 w-full lux-rise">
             @include('partials.flash')
             @yield('content')
         </main>
     </div>
 </div>
+@include('partials.select2')
 </body>
 </html>

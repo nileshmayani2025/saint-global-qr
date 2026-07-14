@@ -21,7 +21,7 @@
             <option value="reward" @selected(($filters['type'] ?? null) === 'reward')>Reward</option>
             <option value="cashback" @selected(($filters['type'] ?? null) === 'cashback')>Cashback</option>
         </select>
-        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-ghost px-4 py-2 text-sm">Filter</button>
     </form>
 
     <div class="lux-card overflow-hidden">

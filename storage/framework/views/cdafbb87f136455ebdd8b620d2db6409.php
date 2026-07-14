@@ -1,36 +1,31 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ dark: localStorage.getItem('theme') === 'dark' }" :class="{ 'dark': dark }">
+<html lang="en" x-data="{ dark: (localStorage.getItem('theme') ?? 'dark') === 'dark' }" :class="{ 'dark': dark }">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title><?php echo $__env->yieldContent('title', 'Welcome'); ?> · <?php echo e(config('app.name')); ?></title>
+    <link rel="icon" href="/images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config = { darkMode: 'class', theme: { extend: { colors: { brand: {50:'#f0f9fd',100:'#ddf0f9',200:'#bce3f2',300:'#8ccfe8',400:'#54b3d8',500:'#2ca0d4',600:'#2185b8',700:'#1d6d97',800:'#1b5a7c',900:'#194c68'} } } } }</script>
+    <?php echo $__env->make('partials.theme', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak]{display:none!important}</style>
 </head>
-<body class="min-h-screen bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased">
-    <div class="min-h-screen grid lg:grid-cols-2">
-        <div class="hidden lg:flex flex-col justify-between p-12 text-white" style="background: linear-gradient(160deg, #2ca0d4, #1b5a7c);">
-            <div class="flex items-center gap-3">
-                <img src="/images/logo.png" alt="Saint Globe" class="w-12 h-12 rounded-xl shadow-md">
-                <div class="leading-tight">
-                    <div class="font-semibold text-lg">Saint Globe</div>
-                    <div class="text-xs text-white/70">A Construction Chemicals</div>
-                </div>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-5 sm:p-8"
+         style="background:radial-gradient(760px 460px at 50% -10%, rgba(44,160,212,.18), transparent 60%), radial-gradient(600px 380px at 50% 120%, rgba(217,178,95,.08), transparent 60%);">
+        <div class="w-full max-w-md lux-rise">
+            <div class="text-center mb-7">
+                <img src="/images/logo.png" alt="Saint Globe" class="w-20 h-20 mx-auto rounded-2xl ring-1 ring-black/5 dark:ring-white/10 shadow-xl">
+                <div class="mt-3 font-display font-bold text-xl">Saint Globe</div>
+                <div class="text-xs text-[var(--muted)]">A Construction Chemicals</div>
             </div>
-            <div>
-                <h2 class="text-3xl font-bold leading-tight">Product authentication &amp; reward platform</h2>
-                <p class="mt-4 text-white/80 max-w-md">QR-based anti-counterfeit verification, batch management and consumer rewards — in one secure ERP.</p>
-            </div>
-            <p class="text-white/60 text-sm">&copy; <?php echo e(date('Y')); ?> Saint Globe · A Construction Chemicals</p>
-        </div>
-        <div class="flex items-center justify-center p-6 sm:p-12">
-            <div class="w-full max-w-md">
+
+            <div class="lux-card p-7 sm:p-8">
                 <?php echo $__env->make('partials.flash', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
                 <?php echo $__env->yieldContent('content'); ?>
             </div>
+
+            <p class="mt-6 text-center text-xs text-[var(--muted)]">&copy; <?php echo e(date('Y')); ?> Saint Globe · A Construction Chemicals</p>
         </div>
     </div>
 </body>

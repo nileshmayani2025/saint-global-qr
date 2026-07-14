@@ -21,11 +21,11 @@
                             <td class="px-4 py-3 font-medium">{{ ucwords(str_replace('-', ' ', $role->name)) }}</td>
                             <td class="px-4 py-3 text-slate-500">{{ $role->permissions_count }}</td>
                             <td class="px-4 py-3 text-slate-500">{{ $role->users_count }}</td>
-                            <td class="px-4 py-3 text-right whitespace-nowrap">
-                                @can('roles.update')<a href="{{ route('roles.edit', $role) }}" class="text-brand-600 hover:underline">Edit</a>@endcan
-                                @can('roles.delete')
-                                    <form method="POST" action="{{ route('roles.destroy', $role) }}" class="inline" onsubmit="return confirm('Delete this role?')">@csrf @method('DELETE')<button class="ml-3 text-rose-600 hover:underline">Delete</button></form>
-                                @endcan
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    @can('roles.update')<x-act.edit :href="route('roles.edit', $role)" />@endcan
+                                    @can('roles.delete')<x-act.delete :action="route('roles.destroy', $role)" confirm="Delete this role?" />@endcan
+                                </div>
                             </td>
                         </tr>
                     @empty

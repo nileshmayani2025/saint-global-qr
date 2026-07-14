@@ -26,11 +26,11 @@
                             <td class="px-4 py-3 font-medium">{{ $brand->name }}</td>
                             <td class="px-4 py-3 text-slate-500">{{ $brand->sort_order }}</td>
                             <td class="px-4 py-3"><x-badge :status="$brand->status" /></td>
-                            <td class="px-4 py-3 text-right whitespace-nowrap">
-                                @can('brands.update')<a href="{{ route('brands.edit', $brand) }}" class="text-brand-600 hover:underline">Edit</a>@endcan
-                                @can('brands.delete')
-                                    <form method="POST" action="{{ route('brands.destroy', $brand) }}" class="inline" onsubmit="return confirm('Delete this brand?')">@csrf @method('DELETE')<button class="ml-3 text-rose-600 hover:underline">Delete</button></form>
-                                @endcan
+                            <td class="px-4 py-3">
+                                <div class="flex items-center justify-end gap-2">
+                                    @can('brands.update')<x-act.edit :href="route('brands.edit', $brand)" />@endcan
+                                    @can('brands.delete')<x-act.delete :action="route('brands.destroy', $brand)" confirm="Delete this brand?" />@endcan
+                                </div>
                             </td>
                         </tr>
                     @empty
