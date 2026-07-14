@@ -35,7 +35,7 @@
                         </div>
                         <button class="rounded-lg lux-btn text-white font-medium px-5 py-2.5" @disabled($stats['remaining'] <= 0)>Generate</button>
                         @can('qr-codes.print')
-                            <a href="{{ route('qr-codes.print', $batch) }}" target="_blank" class="rounded-lg border border-slate-300 dark:border-slate-700 px-5 py-2.5 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Print sheet</a>
+                            <a href="{{ route('qr-codes.print', $batch) }}" target="_blank" class="lux-ghost px-5 py-2.5">Print sheet</a>
                         @endcan
                     </form>
                 </div>

@@ -12,7 +12,7 @@
             <option value="">Any status</option>
             @foreach (['generated','printed','active','verified','blocked'] as $s)<option value="{{ $s }}" @selected(($filters['status'] ?? null) === $s)>{{ ucfirst($s) }}</option>@endforeach
         </select>
-        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-ghost px-4 py-2 text-sm">Filter</button>
     </form>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

@@ -72,7 +72,7 @@
 
         <div class="mt-5 flex items-center gap-3">
             <button class="rounded-lg lux-btn text-white font-medium px-5 py-2.5">{{ $product->exists ? 'Update' : 'Create' }} product</button>
-            <button name="after_save" value="continue" class="rounded-lg border border-slate-300 dark:border-slate-700 px-5 py-2.5 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Save &amp; continue</button>
+            <button name="after_save" value="continue" class="lux-ghost px-5 py-2.5">Save &amp; continue</button>
             <a href="{{ route('products.index') }}" class="text-slate-500 hover:text-slate-700">Cancel</a>
         </div>
     </form>

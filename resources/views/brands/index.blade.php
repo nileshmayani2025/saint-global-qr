@@ -11,7 +11,7 @@
 
     <form method="GET" class="mb-4 flex gap-3">
         <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search brands…" class="lux-field px-3 py-2 text-sm flex-1 max-w-xs">
-        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-ghost px-4 py-2 text-sm">Filter</button>
     </form>
 
     <div class="lux-card overflow-hidden">
