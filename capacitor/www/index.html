@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Saint Global Verify</title>
+    <style>
+        html, body { margin: 0; height: 100%; }
+        body {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: linear-gradient(160deg, #2ca0d4, #1b5a7c);
+            color: #fff; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center;
+        }
+        img { width: 180px; height: auto; }
+        .spinner { margin-top: 24px; width: 28px; height: 28px; border: 3px solid rgba(255,255,255,.3);
+            border-top-color: #fff; border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        p { margin-top: 20px; opacity: .85; font-size: 14px; }
+        a { color: #fff; }
+    </style>
+</head>
+<body>
+    <img src="icon.png" alt="Saint Global" onerror="this.style.display='none'">
+    <div class="spinner"></div>
+    <p>Loading Saint Global Verify…</p>
+    <p style="font-size:12px;opacity:.6">If this screen stays, check the app server is running.<br>
+        <a id="server" href="#"></a></p>
+    <script>
+        // When served locally (server.url unreachable), offer the configured server link.
+        var SERVER = 'http://192.168.1.156:8000/verify';
+        var el = document.getElementById('server');
+        el.textContent = SERVER; el.href = SERVER;
+        // If loaded as the local fallback, try navigating to the live server.
+        setTimeout(function () {
+            if (location.protocol === 'file:' || location.hostname === 'localhost') {
+                location.href = SERVER;
+            }
+        }, 800);
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+    "name": "Saint Global Verify",
+    "short_name": "Saint Verify",
+    "description": "Verify genuine products and earn reward points.",
+    "start_url": "/verify",
+    "scope": "/",
+    "display": "standalone",
+    "orientation": "portrait",
+    "background_color": "#0f172a",
+    "theme_color": "#2ca0d4",
+    "icons": [
+        { "src": "/images/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+        { "src": "/images/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+        { "src": "/images/pwa-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+        { "src": "/images/pwa-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    ]
+}

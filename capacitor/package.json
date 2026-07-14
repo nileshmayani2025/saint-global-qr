@@ -1,0 +1,23 @@
+{
+    "name": "saint-global-verify-mobile",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Saint Global Verify — Capacitor Android/iOS shell for the verification & rewards app.",
+    "scripts": {
+        "sync": "cap sync",
+        "open:android": "cap open android",
+        "build:android": "cap sync android && cd android && gradlew.bat assembleDebug",
+        "run:android": "cap run android"
+    },
+    "dependencies": {
+        "@capacitor/android": "^6.1.2",
+        "@capacitor/app": "^6.0.1",
+        "@capacitor/core": "^6.1.2",
+        "@capacitor/geolocation": "^6.0.1",
+        "@capacitor/splash-screen": "^6.0.2",
+        "@capacitor/status-bar": "^6.0.1"
+    },
+    "devDependencies": {
+        "@capacitor/cli": "^6.1.2"
+    }
+}
