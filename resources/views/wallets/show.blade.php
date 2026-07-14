@@ -5,7 +5,7 @@
     <a href="{{ route('wallets.index') }}" class="text-sm text-slate-500 hover:text-brand-600">&larr; Back to wallets</a>
 
     <div class="mt-4 grid lg:grid-cols-3 gap-6">
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+        <div class="lux-card p-6">
             <div class="text-sm text-slate-400">{{ ucfirst($wallet->type) }} wallet</div>
             <div class="mt-1 text-3xl font-bold text-emerald-600">₹{{ number_format((float) $wallet->balance, 2) }}</div>
             <div class="mt-4 pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2 text-sm">
@@ -16,11 +16,11 @@
             </div>
         </div>
 
-        <div class="lg:col-span-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="lg:col-span-2 lux-card overflow-hidden">
             <h3 class="font-semibold p-5 pb-3">Transactions</h3>
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead class="bg-slate-50 dark:bg-slate-800/50 text-left text-slate-500 dark:text-slate-400">
+                    <thead class="bg-transparent text-left text-slate-500 dark:text-slate-400">
                         <tr><th class="px-4 py-3 font-medium">Reason</th><th class="px-4 py-3 font-medium">Amount</th><th class="px-4 py-3 font-medium">Balance</th><th class="px-4 py-3 font-medium">When</th></tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

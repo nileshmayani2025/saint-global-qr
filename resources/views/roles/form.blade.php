@@ -7,11 +7,11 @@
     <form method="POST" action="{{ $role->exists ? route('roles.update', $role) : route('roles.store') }}" class="mt-4 max-w-3xl" x-data>
         @csrf
         @if ($role->exists) @method('PUT') @endif
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 space-y-6">
+        <div class="lux-card p-6 space-y-6">
             @if (! $role->exists)
                 <div class="max-w-sm">
                     <label class="block text-sm font-medium mb-1.5">Role key</label>
-                    <input name="name" value="{{ old('name') }}" required placeholder="e.g. regional-manager" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input name="name" value="{{ old('name') }}" required placeholder="e.g. regional-manager" class="w-full lux-field px-3.5 py-2.5">
                     <p class="text-xs text-slate-400 mt-1">Lowercase letters, numbers and hyphens only.</p>
                 </div>
             @else
@@ -46,7 +46,7 @@
             </div>
         </div>
         <div class="mt-5 flex items-center gap-3">
-            <button class="rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5">{{ $role->exists ? 'Update permissions' : 'Create role' }}</button>
+            <button class="rounded-lg lux-btn text-white font-medium px-5 py-2.5">{{ $role->exists ? 'Update permissions' : 'Create role' }}</button>
             <a href="{{ route('roles.index') }}" class="text-slate-500 hover:text-slate-700">Cancel</a>
         </div>
     </form>

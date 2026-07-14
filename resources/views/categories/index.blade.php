@@ -5,19 +5,19 @@
     <div class="flex items-center justify-between gap-3 mb-5">
         <p class="text-slate-500 dark:text-slate-400 text-sm">{{ $categories->total() }} categor(ies)</p>
         @can('categories.create')
-            <a href="{{ route('categories.create') }}" class="rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2">+ New category</a>
+            <a href="{{ route('categories.create') }}" class="rounded-lg lux-btn text-white text-sm font-medium px-4 py-2">+ New category</a>
         @endcan
     </div>
 
     <form method="GET" class="mb-4 flex gap-3">
-        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search categories…" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm flex-1 max-w-xs">
-        <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm font-medium">Filter</button>
+        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search categories…" class="lux-field px-3 py-2 text-sm flex-1 max-w-xs">
+        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
     </form>
 
-    <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div class="lux-card overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-slate-50 dark:bg-slate-800/50 text-left text-slate-500 dark:text-slate-400">
+                <thead class="bg-transparent text-left text-slate-500 dark:text-slate-400">
                     <tr><th class="px-4 py-3 font-medium">Name</th><th class="px-4 py-3 font-medium">Parent</th><th class="px-4 py-3 font-medium">Sort</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3"></th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

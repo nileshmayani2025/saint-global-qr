@@ -7,30 +7,30 @@
     <form method="POST" action="{{ $userModel->exists ? route('users.update', $userModel) : route('users.store') }}" class="mt-4 max-w-2xl">
         @csrf
         @if ($userModel->exists) @method('PUT') @endif
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 space-y-5">
+        <div class="lux-card p-6 space-y-5">
             <div class="grid sm:grid-cols-2 gap-5">
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Name</label>
-                    <input name="name" value="{{ old('name', $userModel->name) }}" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input name="name" value="{{ old('name', $userModel->name) }}" required class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Email</label>
-                    <input type="email" name="email" value="{{ old('email', $userModel->email) }}" required class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input type="email" name="email" value="{{ old('email', $userModel->email) }}" required class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Phone</label>
-                    <input name="phone" value="{{ old('phone', $userModel->phone) }}" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input name="phone" value="{{ old('phone', $userModel->phone) }}" class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Status</label>
-                    <select name="status" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <select name="status" class="w-full lux-field px-3.5 py-2.5">
                         @foreach (['active','inactive','suspended'] as $s)<option value="{{ $s }}" @selected(old('status', $userModel->status ?? 'active') === $s)>{{ ucfirst($s) }}</option>@endforeach
                     </select>
                 </div>
                 @if ($companies->isNotEmpty())
                     <div class="sm:col-span-2">
                         <label class="block text-sm font-medium mb-1.5">Company</label>
-                        <select name="company_id" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                        <select name="company_id" class="w-full lux-field px-3.5 py-2.5">
                             <option value="">— None —</option>
                             @foreach ($companies as $c)<option value="{{ $c->id }}" @selected(old('company_id', $userModel->company_id) == $c->id)>{{ $c->name }}</option>@endforeach
                         </select>
@@ -38,11 +38,11 @@
                 @endif
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Password {{ $userModel->exists ? '(leave blank to keep)' : '' }}</label>
-                    <input type="password" name="password" {{ $userModel->exists ? '' : 'required' }} class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input type="password" name="password" {{ $userModel->exists ? '' : 'required' }} class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Confirm password</label>
-                    <input type="password" name="password_confirmation" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5">
+                    <input type="password" name="password_confirmation" class="w-full lux-field px-3.5 py-2.5">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
             </div>
         </div>
         <div class="mt-5 flex items-center gap-3">
-            <button class="rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium px-5 py-2.5">{{ $userModel->exists ? 'Update' : 'Create' }} user</button>
+            <button class="rounded-lg lux-btn text-white font-medium px-5 py-2.5">{{ $userModel->exists ? 'Update' : 'Create' }} user</button>
             <a href="{{ route('users.index') }}" class="text-slate-500 hover:text-slate-700">Cancel</a>
         </div>
     </form>

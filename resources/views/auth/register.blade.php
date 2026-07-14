@@ -10,35 +10,35 @@
         <div>
             <label class="block text-sm font-medium mb-1.5">Full name</label>
             <input type="text" name="name" value="{{ old('name') }}" required autofocus
-                   class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
+                   class="w-full lux-field px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
         </div>
         <div>
             <label class="block text-sm font-medium mb-1.5">Email</label>
             <input type="email" name="email" value="{{ old('email') }}" required
-                   class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
+                   class="w-full lux-field px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
         </div>
         <div>
             <label class="block text-sm font-medium mb-1.5">Phone <span class="text-slate-400">(optional)</span></label>
             <input type="text" name="phone" value="{{ old('phone') }}"
-                   class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
+                   class="w-full lux-field px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
         </div>
         <div class="grid sm:grid-cols-2 gap-4">
             <div>
                 <label class="block text-sm font-medium mb-1.5">Password</label>
                 <input type="password" name="password" required
-                       class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
+                       class="w-full lux-field px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1.5">Confirm</label>
                 <input type="password" name="password_confirmation" required
-                       class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
+                       class="w-full lux-field px-3.5 py-2.5 focus:ring-2 focus:ring-brand-500 outline-none">
             </div>
         </div>
         <label class="flex items-center gap-2 text-sm">
             <input type="checkbox" name="terms" value="1" required class="rounded border-slate-300 text-brand-600 focus:ring-brand-500">
             I agree to the terms of service
         </label>
-        <button class="w-full rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 transition">Create account</button>
+        <button class="w-full rounded-lg lux-btn text-white font-medium py-2.5 transition">Create account</button>
     </form>
 
     <p class="mt-6 text-sm text-center text-slate-500 dark:text-slate-400">

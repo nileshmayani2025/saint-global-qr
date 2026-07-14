@@ -5,27 +5,27 @@
     <div class="flex items-center justify-between gap-3 mb-5">
         <p class="text-slate-500 dark:text-slate-400 text-sm">{{ $batches->total() }} batch(es)</p>
         @can('batches.create')
-            <a href="{{ route('batches.create') }}" class="rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium px-4 py-2">+ New batch</a>
+            <a href="{{ route('batches.create') }}" class="rounded-lg lux-btn text-white text-sm font-medium px-4 py-2">+ New batch</a>
         @endcan
     </div>
 
     <form method="GET" class="mb-4 grid sm:grid-cols-4 gap-3">
-        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search code…" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
-        <select name="product_id" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
+        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search code…" class="lux-field px-3 py-2 text-sm">
+        <select name="product_id" class="lux-field px-3 py-2 text-sm">
             <option value="">All products</option>
             @foreach ($products as $p)<option value="{{ $p->id }}" @selected(($filters['product_id'] ?? null) == $p->id)>{{ $p->name }}</option>@endforeach
         </select>
-        <select name="status" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
+        <select name="status" class="lux-field px-3 py-2 text-sm">
             <option value="">Any status</option>
             @foreach (['draft','generating','active','closed'] as $s)<option value="{{ $s }}" @selected(($filters['status'] ?? null) === $s)>{{ ucfirst($s) }}</option>@endforeach
         </select>
-        <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
     </form>
 
-    <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div class="lux-card overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-slate-50 dark:bg-slate-800/50 text-left text-slate-500 dark:text-slate-400">
+                <thead class="bg-transparent text-left text-slate-500 dark:text-slate-400">
                     <tr><th class="px-4 py-3 font-medium">Code</th><th class="px-4 py-3 font-medium">Product</th><th class="px-4 py-3 font-medium">Qty</th><th class="px-4 py-3 font-medium">Generated</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3"></th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

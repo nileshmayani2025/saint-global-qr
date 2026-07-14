@@ -11,8 +11,8 @@
     <form method="POST" action="{{ route('verify.submit') }}" class="mt-8 space-y-4">
         @csrf
         <input name="code" value="{{ old('code') }}" required autofocus placeholder="Enter or paste the product code"
-               class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 text-center focus:ring-2 focus:ring-brand-500 outline-none">
-        <button class="w-full rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-medium py-3">Verify now</button>
+               class="w-full lux-field px-4 py-3 text-center focus:ring-2 focus:ring-brand-500 outline-none">
+        <button class="w-full rounded-lg lux-btn text-white font-medium py-3">Verify now</button>
     </form>
 
     <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">

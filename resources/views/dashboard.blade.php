@@ -18,7 +18,7 @@
 
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         @foreach ($cards as $c)
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4">
+            <div class="lux-card p-4">
                 <div class="text-sm text-slate-500 dark:text-slate-400">{{ $c['label'] }}</div>
                 <div class="mt-1 text-2xl font-bold text-{{ $c['color'] }}-600 dark:text-{{ $c['color'] }}-400">{{ number_format($c['value']) }}</div>
             </div>
@@ -26,7 +26,7 @@
     </div>
 
     <div class="grid lg:grid-cols-3 gap-4 mt-6">
-        <div class="lg:col-span-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
+        <div class="lg:col-span-2 lux-card p-5">
             <h2 class="font-semibold mb-4">Verifications — last 14 days</h2>
             <div class="flex items-end gap-1.5 h-48">
                 @foreach ($series as $point)
@@ -41,7 +41,7 @@
             </div>
         </div>
 
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
+        <div class="lux-card p-5">
             <h2 class="font-semibold mb-4">Scan results</h2>
             @php $totalScans = max(1, $resultBreakdown->sum()); @endphp
             <div class="space-y-3">
@@ -61,7 +61,7 @@
     </div>
 
     <div class="grid lg:grid-cols-2 gap-4 mt-6">
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
+        <div class="lux-card p-5">
             <h2 class="font-semibold mb-4">Top products</h2>
             <div class="space-y-3">
                 @forelse ($topProducts as $tp)
@@ -78,7 +78,7 @@
             </div>
         </div>
 
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5">
+        <div class="lux-card p-5">
             <h2 class="font-semibold mb-4">Recent activity</h2>
             <div class="space-y-3">
                 @forelse ($recentActivity as $log)

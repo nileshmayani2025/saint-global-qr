@@ -22,7 +22,7 @@
     </div>
 
     @if ($product)
-        <div class="mt-8 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+        <div class="mt-8 lux-card p-6">
             <h2 class="font-semibold text-lg">{{ $product->name }}</h2>
             <p class="text-sm text-slate-500">{{ $product->brand?->name }}</p>
             <dl class="mt-4 space-y-2 text-sm">

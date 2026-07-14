@@ -7,17 +7,17 @@
     </div>
 
     <form method="GET" class="mb-4 grid sm:grid-cols-3 gap-3">
-        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search code…" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
-        <select name="status" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
+        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search code…" class="lux-field px-3 py-2 text-sm">
+        <select name="status" class="lux-field px-3 py-2 text-sm">
             <option value="">Any status</option>
             @foreach (['generated','printed','active','verified','blocked'] as $s)<option value="{{ $s }}" @selected(($filters['status'] ?? null) === $s)>{{ ucfirst($s) }}</option>@endforeach
         </select>
-        <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
     </form>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
         @forelse ($qrCodes as $qr)
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4">
+            <div class="lux-card p-4">
                 <a href="{{ route('qr-codes.show', $qr) }}" class="block">
                     @if ($qr->image_path)
                         <img src="{{ \Illuminate\Support\Facades\Storage::url($qr->image_path) }}" class="w-full aspect-square object-contain rounded-lg bg-white p-2 border border-slate-100 dark:border-slate-800">
@@ -35,7 +35,7 @@
                 </div>
             </div>
         @empty
-            <div class="col-span-full rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 py-10 text-center text-slate-400">No QR codes found.</div>
+            <div class="col-span-full lux-card py-10 text-center text-slate-400">No QR codes found.</div>
         @endforelse
     </div>
     <div class="mt-4">{{ $qrCodes->withQueryString()->links() }}</div>

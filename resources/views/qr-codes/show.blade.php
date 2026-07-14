@@ -5,7 +5,7 @@
     <a href="{{ route('qr-codes.index') }}" class="text-sm text-slate-500 hover:text-brand-600">&larr; Back to QR codes</a>
 
     <div class="mt-4 grid lg:grid-cols-3 gap-6">
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 text-center">
+        <div class="lux-card p-6 text-center">
             @if ($qrCode->image_path)
                 <img src="{{ \Illuminate\Support\Facades\Storage::url($qrCode->image_path) }}" class="w-full max-w-[240px] mx-auto aspect-square object-contain bg-white p-3 rounded-lg border border-slate-100">
             @endif
@@ -21,7 +21,7 @@
         </div>
 
         <div class="lg:col-span-2 space-y-6">
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+            <div class="lux-card p-6">
                 <h3 class="font-semibold mb-4">Details</h3>
                 <dl class="grid sm:grid-cols-2 gap-4 text-sm">
                     <div><dt class="text-slate-400">Product</dt><dd class="font-medium">{{ $qrCode->product?->name ?? '—' }}</dd></div>
@@ -34,7 +34,7 @@
                 </dl>
             </div>
 
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+            <div class="lux-card p-6">
                 <h3 class="font-semibold mb-4">Recent scans</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm">

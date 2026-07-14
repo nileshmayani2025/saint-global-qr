@@ -5,7 +5,7 @@
     <a href="{{ route('users.index') }}" class="text-sm text-slate-500 hover:text-brand-600">&larr; Back to users</a>
 
     <div class="mt-4 grid lg:grid-cols-3 gap-6">
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6 text-center">
+        <div class="lux-card p-6 text-center">
             <div class="w-20 h-20 mx-auto rounded-full bg-brand-600 text-white grid place-items-center text-2xl font-bold">{{ strtoupper(substr($userModel->name, 0, 1)) }}</div>
             <h2 class="mt-4 text-lg font-bold">{{ $userModel->name }}</h2>
             <p class="text-slate-500 text-sm">{{ $userModel->email }}</p>
@@ -18,7 +18,7 @@
         </div>
 
         <div class="lg:col-span-2 space-y-6">
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+            <div class="lux-card p-6">
                 <h3 class="font-semibold mb-4">Account</h3>
                 <dl class="grid sm:grid-cols-2 gap-4 text-sm">
                     <div><dt class="text-slate-400">Phone</dt><dd class="font-medium">{{ $userModel->phone ?? '—' }}</dd></div>
@@ -29,7 +29,7 @@
                 </dl>
             </div>
 
-            <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+            <div class="lux-card p-6">
                 <h3 class="font-semibold mb-4">Wallets</h3>
                 <div class="space-y-2 text-sm">
                     @forelse ($userModel->wallets as $wallet)

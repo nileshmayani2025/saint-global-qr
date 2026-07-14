@@ -5,7 +5,7 @@
     <a href="{{ route('redemptions.index') }}" class="text-sm text-slate-500 hover:text-brand-600">&larr; Back to redemptions</a>
 
     <div class="mt-4 grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-6">
+        <div class="lg:col-span-2 lux-card p-6">
             <div class="flex items-start justify-between">
                 <div>
                     <div class="font-mono text-xs text-slate-400">{{ $redemption->reference }}</div>
@@ -37,22 +37,22 @@
         @if ($redemption->isPending())
             <div class="space-y-4">
                 @can('redemptions.approve')
-                    <form method="POST" action="{{ route('redemptions.approve', $redemption) }}" enctype="multipart/form-data" class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-3">
+                    <form method="POST" action="{{ route('redemptions.approve', $redemption) }}" enctype="multipart/form-data" class="lux-card p-5 space-y-3">
                         @csrf
                         <h3 class="font-semibold text-emerald-600">Approve</h3>
                         <div>
                             <label class="block text-sm mb-1">Payout proof (optional)</label>
                             <input type="file" name="attachment" accept="image/*,application/pdf" class="w-full text-sm">
                         </div>
-                        <textarea name="review_note" rows="2" placeholder="Review note (optional)" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"></textarea>
+                        <textarea name="review_note" rows="2" placeholder="Review note (optional)" class="w-full lux-field px-3 py-2 text-sm"></textarea>
                         <button class="w-full rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5" onsubmit="return confirm('Approve and debit points?')">Approve &amp; debit</button>
                     </form>
                 @endcan
                 @can('redemptions.reject')
-                    <form method="POST" action="{{ route('redemptions.reject', $redemption) }}" class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-5 space-y-3">
+                    <form method="POST" action="{{ route('redemptions.reject', $redemption) }}" class="lux-card p-5 space-y-3">
                         @csrf
                         <h3 class="font-semibold text-rose-600">Reject</h3>
-                        <textarea name="rejection_reason" rows="2" required placeholder="Reason for rejection" class="w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm"></textarea>
+                        <textarea name="rejection_reason" rows="2" required placeholder="Reason for rejection" class="w-full lux-field px-3 py-2 text-sm"></textarea>
                         <button class="w-full rounded-lg border border-rose-300 text-rose-600 font-medium py-2.5 hover:bg-rose-50 dark:hover:bg-rose-900/20">Reject request</button>
                     </form>
                 @endcan

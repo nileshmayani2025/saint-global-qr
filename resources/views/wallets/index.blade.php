@@ -3,31 +3,31 @@
 
 @section('content')
     <div class="grid sm:grid-cols-3 gap-4 mb-6">
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4">
+        <div class="lux-card p-4">
             <div class="text-sm text-slate-400">Wallets</div><div class="text-2xl font-bold">{{ number_format($totals['wallets']) }}</div>
         </div>
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4">
+        <div class="lux-card p-4">
             <div class="text-sm text-slate-400">Total balance</div><div class="text-2xl font-bold text-emerald-600">₹{{ number_format((float) $totals['balance'], 2) }}</div>
         </div>
-        <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4">
+        <div class="lux-card p-4">
             <div class="text-sm text-slate-400">Lifetime credited</div><div class="text-2xl font-bold">₹{{ number_format((float) $totals['credited'], 2) }}</div>
         </div>
     </div>
 
     <form method="GET" class="mb-4 grid sm:grid-cols-3 gap-3">
-        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search user…" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
-        <select name="type" class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm">
+        <input name="search" value="{{ $filters['search'] ?? '' }}" placeholder="Search user…" class="lux-field px-3 py-2 text-sm">
+        <select name="type" class="lux-field px-3 py-2 text-sm">
             <option value="">All types</option>
             <option value="reward" @selected(($filters['type'] ?? null) === 'reward')>Reward</option>
             <option value="cashback" @selected(($filters['type'] ?? null) === 'cashback')>Cashback</option>
         </select>
-        <button class="rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-sm font-medium">Filter</button>
+        <button class="lux-field px-3 py-2 text-sm font-medium">Filter</button>
     </form>
 
-    <div class="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-hidden">
+    <div class="lux-card overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
-                <thead class="bg-slate-50 dark:bg-slate-800/50 text-left text-slate-500 dark:text-slate-400">
+                <thead class="bg-transparent text-left text-slate-500 dark:text-slate-400">
                     <tr><th class="px-4 py-3 font-medium">User</th><th class="px-4 py-3 font-medium">Type</th><th class="px-4 py-3 font-medium">Balance</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3"></th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">

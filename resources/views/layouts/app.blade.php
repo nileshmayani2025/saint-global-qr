@@ -1,21 +1,17 @@
 <!DOCTYPE html>
-<html lang="en" x-data="{ dark: localStorage.getItem('theme') === 'dark', sidebar: window.innerWidth > 1024 }"
+<html lang="en" x-data="{ dark: (localStorage.getItem('theme') ?? 'dark') === 'dark', sidebar: window.innerWidth > 1024 }"
       :class="{ 'dark': dark }" x-init="$watch('dark', v => localStorage.setItem('theme', v ? 'dark' : 'light'))">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') · {{ config('app.name') }}</title>
+    <link rel="icon" href="/images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: {
-            brand: { 50:'#f0f9fd',100:'#ddf0f9',200:'#bce3f2',300:'#8ccfe8',400:'#54b3d8',500:'#2ca0d4',600:'#2185b8',700:'#1d6d97',800:'#1b5a7c',900:'#194c68' }
-        } } } }
-    </script>
+    @include('partials.theme')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>[x-cloak]{display:none!important}</style>
 </head>
-<body class="bg-slate-100 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased">
+<body>
 @php
     $nav = [
         ['route' => 'dashboard',        'label' => 'Dashboard',   'perm' => null,              'icon' => 'M3 12l9-9 9 9M5 10v10h14V10'],
@@ -29,82 +25,98 @@
         ['route' => 'users.index',      'label' => 'Users',       'perm' => 'users.view',      'icon' => 'M17 20h5v-2a4 4 0 00-3-3.87M9 20H4v-2a4 4 0 013-3.87m6-1.13a4 4 0 10-4-4 4 4 0 004 4z'],
         ['route' => 'roles.index',      'label' => 'Roles',       'perm' => 'roles.view',      'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
     ];
+    $extra = [
+        ['route' => 'my.scans',    'label' => 'My Scans',   'icon' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2'],
+        ['route' => 'my.rewards',  'label' => 'My Rewards', 'icon' => 'M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z'],
+    ];
     $isActive = fn ($route) => request()->routeIs($route) || request()->routeIs(\Illuminate\Support\Str::before($route, '.').'.*');
 @endphp
 
 <div class="min-h-screen lg:flex">
     <!-- Sidebar -->
-    <aside x-show="sidebar" x-cloak
-           class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col lg:static lg:translate-x-0">
-        <div class="h-16 flex items-center gap-2.5 px-4 border-b border-slate-200 dark:border-slate-800">
-            <img src="/images/logo.png" alt="Saint Globe" class="w-10 h-10 rounded-lg object-cover shadow-sm">
-            <div class="font-semibold leading-tight">Saint&nbsp;Globe<br><span class="text-xs text-slate-400 font-normal">Verify &amp; Reward</span></div>
+    <div x-show="sidebar && window.innerWidth <= 1024" x-cloak @click="sidebar=false" class="fixed inset-0 z-30 bg-slate-950/60 lg:hidden"></div>
+    <aside x-show="sidebar" x-cloak x-transition:enter.duration.200ms
+           class="lux-sidebar fixed inset-y-0 left-0 z-40 w-[264px] flex flex-col lg:static lg:translate-x-0">
+        <div class="h-[70px] flex items-center gap-3 px-5">
+            <img src="/images/logo.png" alt="Saint Globe" class="w-11 h-11 rounded-xl ring-1 ring-white/20 shadow-lg">
+            <div class="leading-tight text-white">
+                <div class="font-display font-bold tracking-tight">Saint Globe</div>
+                <div class="text-[11px] text-white/50 font-medium">Construction Chemicals</div>
+            </div>
         </div>
-        <nav class="flex-1 overflow-y-auto p-3 space-y-1">
+        <div class="mx-5 lux-divider opacity-40"></div>
+
+        <nav class="flex-1 overflow-y-auto px-3.5 py-4 space-y-1">
+            <p class="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[.14em] text-white/35">Management</p>
             @foreach ($nav as $item)
                 @if (is_null($item['perm']) || auth()->user()->can($item['perm']))
-                    <a href="{{ route($item['route']) }}"
-                       class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition
-                       {{ $isActive($item['route']) ? 'bg-brand-600 text-white shadow' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/></svg>
+                    <a href="{{ route($item['route']) }}" class="lux-nav flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ $isActive($item['route']) ? 'active' : '' }}">
+                        <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/></svg>
                         {{ $item['label'] }}
                     </a>
                 @endif
             @endforeach
 
-            <div class="pt-3 mt-3 border-t border-slate-200 dark:border-slate-800 space-y-1">
-                <a href="{{ route('my.scans') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ $isActive('my.scans') ? 'bg-brand-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                    My Scans
+            <p class="px-3 pt-4 pb-1.5 text-[10px] font-semibold uppercase tracking-[.14em] text-white/35">My account</p>
+            @foreach ($extra as $item)
+                <a href="{{ route($item['route']) }}" class="lux-nav flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium {{ $isActive($item['route']) ? 'active' : '' }}">
+                    <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $item['icon'] }}"/></svg>
+                    {{ $item['label'] }}
                 </a>
-                <a href="{{ route('my.rewards') }}" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium {{ $isActive('my.rewards') ? 'bg-brand-600 text-white' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800' }}">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-                    My Rewards
-                </a>
-                <a href="{{ route('verify.form') }}" target="_blank" class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Verify a Product
-                </a>
-            </div>
+            @endforeach
+            <a href="{{ route('verify.form') }}" target="_blank" class="lux-nav flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium">
+                <svg class="w-[18px] h-[18px]" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Verify a Product
+            </a>
         </nav>
+
+        <div class="p-4">
+            <div class="rounded-2xl p-4 bg-white/5 border border-white/10 text-center">
+                <div class="text-[11px] text-white/50">Signed in as</div>
+                <div class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</div>
+                <div class="mt-0.5 text-[11px] text-gold">{{ auth()->user()->getRoleNames()->first() ?? 'member' }}</div>
+            </div>
+        </div>
     </aside>
 
     <!-- Main -->
     <div class="flex-1 flex flex-col min-w-0">
-        <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3 px-4 sticky top-0 z-30">
-            <button @click="sidebar = !sidebar" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+        <header class="lux-topbar h-[70px] flex items-center gap-3 px-4 sm:px-6 sticky top-0 z-20">
+            <button @click="sidebar = !sidebar" class="p-2 rounded-xl hover:bg-black/5 dark:hover:bg-white/5 transition">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
             </button>
-            <h1 class="font-semibold text-lg">@yield('title', 'Dashboard')</h1>
+            <h1 class="font-display font-bold text-xl">@yield('title', 'Dashboard')</h1>
             <div class="ml-auto flex items-center gap-2">
                 @unless (auth()->user()->isApproved())
-                    <span class="hidden sm:inline text-xs px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 font-medium">Pending approval</span>
+                    <span class="hidden sm:inline text-xs px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-300 font-semibold ring-1 ring-amber-500/25">Pending approval</span>
                 @endunless
-                <button @click="dark = !dark" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800" title="Toggle theme">
+                <button @click="dark = !dark" class="p-2.5 rounded-xl border border-[var(--border)] hover:border-brand-400 transition" title="Toggle theme">
                     <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                    <svg x-show="dark" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    <svg x-show="dark" x-cloak class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </button>
                 <div x-data="{ open: false }" class="relative">
-                    <button @click="open = !open" class="flex items-center gap-2 pl-2 pr-1 py-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <div class="w-8 h-8 rounded-full bg-brand-600 text-white grid place-items-center text-sm font-semibold">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
-                        <span class="hidden sm:block text-sm font-medium">{{ auth()->user()->name }}</span>
+                    <button @click="open = !open" class="flex items-center gap-2.5 pl-1.5 pr-3 py-1.5 rounded-xl border border-[var(--border)] hover:border-brand-400 transition">
+                        <div class="w-8 h-8 rounded-lg grid place-items-center text-sm font-bold text-white" style="background:linear-gradient(135deg,#2ca0d4,#1b5a7c)">{{ strtoupper(substr(auth()->user()->name, 0, 1)) }}</div>
+                        <span class="hidden sm:block text-sm font-semibold">{{ \Illuminate\Support\Str::of(auth()->user()->name)->words(2, '') }}</span>
                     </button>
-                    <div x-show="open" x-cloak @click.outside="open = false"
-                         class="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-lg py-2 text-sm">
-                        <div class="px-4 py-2 border-b border-slate-100 dark:border-slate-800">
-                            <div class="font-medium truncate">{{ auth()->user()->email }}</div>
-                            <div class="text-xs text-slate-400">{{ auth()->user()->getRoleNames()->implode(', ') ?: 'No role' }}</div>
+                    <div x-show="open" x-cloak x-transition @click.outside="open = false" class="lux-card absolute right-0 mt-2 w-60 py-2 text-sm">
+                        <div class="px-4 py-2">
+                            <div class="font-semibold truncate">{{ auth()->user()->email }}</div>
+                            <div class="text-xs text-[var(--muted)]">{{ auth()->user()->getRoleNames()->implode(', ') ?: 'No role' }}</div>
                         </div>
-                        <a href="{{ route('my.rewards') }}" class="block px-4 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">My Rewards</a>
-                        <form method="POST" action="{{ route('logout') }}">@csrf
-                            <button class="w-full text-left px-4 py-2 text-rose-600 hover:bg-slate-100 dark:hover:bg-slate-800">Sign out</button>
+                        <div class="lux-divider my-1"></div>
+                        <a href="{{ route('my.rewards') }}" class="block px-4 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg mx-1">My Rewards</a>
+                        <a href="{{ route('my.scans') }}" class="block px-4 py-2 hover:bg-black/5 dark:hover:bg-white/5 rounded-lg mx-1">My Scans</a>
+                        <div class="lux-divider my-1"></div>
+                        <form method="POST" action="{{ route('logout') }}" class="mx-1">@csrf
+                            <button class="w-full text-left px-4 py-2 text-rose-500 font-medium hover:bg-rose-500/10 rounded-lg">Sign out</button>
                         </form>
                     </div>
                 </div>
             </div>
         </header>
 
-        <main class="flex-1 p-4 sm:p-6 max-w-7xl w-full mx-auto">
+        <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1400px] w-full mx-auto lux-rise">
             @include('partials.flash')
             @yield('content')
         </main>
