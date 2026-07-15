@@ -41,10 +41,10 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            // Relative URL so QR/product images load from whatever host the
-            // browser is on (LAN IP, localhost, etc.) instead of a hardcoded
-            // APP_URL that breaks whenever the machine's DHCP IP changes.
-            'url' => '/storage',
+            // Derive from APP_URL so image URLs carry the correct base path,
+            // including a subdirectory install (e.g. https://host/qr/public).
+            // Keep APP_URL accurate per environment.
+            'url' => rtrim(env('ASSET_URL', env('APP_URL', 'http://localhost')), '/').'/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

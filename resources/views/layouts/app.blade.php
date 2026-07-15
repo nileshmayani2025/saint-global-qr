@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') · {{ config('app.name') }}</title>
-    <link rel="icon" href="/images/logo.png">
+    <link rel="icon" href="{{ asset('images/logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     @include('partials.theme')
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -38,7 +38,7 @@
     <aside x-show="sidebar" x-cloak x-transition:enter.duration.200ms
            class="lux-sidebar fixed inset-y-0 left-0 z-40 w-[264px] flex flex-col lg:static lg:translate-x-0">
         <div class="h-[70px] flex items-center gap-3 px-5">
-            <img src="/images/logo.png" alt="Saint Globe" class="w-11 h-11 rounded-xl ring-1 ring-white/20 shadow-lg">
+            <img src="{{ asset('images/logo.png') }}" alt="Saint Globe" class="w-11 h-11 rounded-xl ring-1 ring-white/20 shadow-lg">
             <div class="leading-tight text-white">
                 <div class="font-display font-bold tracking-tight">Saint Globe</div>
                 <div class="text-[11px] text-white/50 font-medium">Construction Chemicals</div>
