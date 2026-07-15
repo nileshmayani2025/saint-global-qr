@@ -7,7 +7,7 @@
     <div class="mt-4 grid lg:grid-cols-3 gap-6">
         <div class="lux-card p-6 text-center">
             @if ($qrCode->image_path)
-                <img src="{{ \Illuminate\Support\Facades\Storage::url($qrCode->image_path) }}" class="w-full max-w-[240px] mx-auto aspect-square object-contain bg-white p-3 rounded-lg border border-slate-100">
+                <img src="{{ asset('media/'.$qrCode->image_path) }}" class="w-full max-w-[240px] mx-auto aspect-square object-contain bg-white p-3 rounded-lg border border-slate-100">
             @endif
             <div class="mt-4 font-mono text-sm break-all">{{ $qrCode->code }}</div>
             <div class="mt-2"><x-badge :status="$qrCode->status" /></div>

@@ -20,7 +20,7 @@
             <div class="lux-card p-4">
                 <a href="{{ route('qr-codes.show', $qr) }}" class="block">
                     @if ($qr->image_path)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($qr->image_path) }}" class="w-full aspect-square object-contain rounded-lg bg-white p-2 border border-slate-100 dark:border-slate-800">
+                        <img src="{{ asset('media/'.$qr->image_path) }}" class="w-full aspect-square object-contain rounded-lg bg-white p-2 border border-slate-100 dark:border-slate-800">
                     @else
                         <div class="w-full aspect-square rounded-lg bg-slate-100 dark:bg-slate-800 grid place-items-center text-slate-400 text-xs">No image</div>
                     @endif

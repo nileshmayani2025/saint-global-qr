@@ -62,7 +62,7 @@
                 <div class="sm:col-span-2">
                     <label class="block text-sm font-medium mb-1.5">Image</label>
                     @if ($product->image_path)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($product->image_path) }}" class="w-24 h-24 object-cover rounded-lg mb-2 border border-slate-200 dark:border-slate-700">
+                        <img src="{{ asset('media/'.$product->image_path) }}" class="w-24 h-24 object-cover rounded-lg mb-2 border border-slate-200 dark:border-slate-700">
                         <label class="flex items-center gap-2 text-sm mb-2"><input type="checkbox" name="remove_image" value="1" class="rounded"> Remove current image</label>
                     @endif
                     <input type="file" name="image" accept="image/*" class="w-full text-sm">

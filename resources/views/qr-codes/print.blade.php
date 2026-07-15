@@ -20,7 +20,7 @@
             @forelse ($qrCodes as $qr)
                 <div class="border border-slate-300 rounded-lg p-2 text-center break-inside-avoid">
                     @if ($qr->image_path)
-                        <img src="{{ \Illuminate\Support\Facades\Storage::url($qr->image_path) }}" class="w-full aspect-square object-contain">
+                        <img src="{{ asset('media/'.$qr->image_path) }}" class="w-full aspect-square object-contain">
                     @endif
                     <div class="mt-1 text-[9px] font-mono truncate">{{ $qr->code }}</div>
                     <div class="text-[9px] text-slate-500">#{{ $qr->serial }}</div>

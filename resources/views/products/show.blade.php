@@ -8,7 +8,7 @@
         <div class="lg:col-span-2 lux-card p-6">
             <div class="flex items-start gap-4">
                 @if ($product->image_path)
-                    <img src="{{ \Illuminate\Support\Facades\Storage::url($product->image_path) }}" class="w-24 h-24 object-cover rounded-lg border border-slate-200 dark:border-slate-700">
+                    <img src="{{ asset('media/'.$product->image_path) }}" class="w-24 h-24 object-cover rounded-lg border border-slate-200 dark:border-slate-700">
                 @endif
                 <div>
                     <h2 class="text-xl font-bold">{{ $product->name }}</h2>

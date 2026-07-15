@@ -17,6 +17,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Verification\PublicVerificationController;
 use App\Http\Controllers\Wallet\WalletController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,25 @@ Route::post('verify', [PublicVerificationController::class, 'verify'])->name('ve
 Route::get('verify/{code}', [PublicVerificationController::class, 'show'])
     ->where('code', '.*')
     ->name('verify.show');
+
+/*
+|--------------------------------------------------------------------------
+| Public media
+|--------------------------------------------------------------------------
+| Streams files from the "public" storage disk through PHP so images work
+| even when the OS storage symlink is missing (common on shared / subfolder
+| hosting). URL is built with asset('media/...') so it inherits APP_URL's
+| base path (e.g. /qr/public) automatically.
+*/
+Route::get('media/{path}', function (string $path) {
+    $disk = Storage::disk('public');
+
+    abort_unless($disk->exists($path), 404);
+
+    return $disk->response($path, null, [
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*')->name('media');
 
 Route::get('/', fn () => redirect()->route(auth()->check() ? 'dashboard' : 'login'));
 
