@@ -8,17 +8,35 @@ use App\Models\ActivityLog;
 use App\Models\Batch;
 use App\Models\Product;
 use App\Models\QrCode;
+use App\Models\RedemptionRequest;
 use App\Models\Scan;
 use App\Models\VerificationLog;
+use App\Services\Reward\RedemptionService;
+use App\Services\Wallet\WalletService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
+    public function __construct(
+        private readonly WalletService $wallets,
+        private readonly RedemptionService $redemptions,
+    ) {
+    }
+
     public function index(Request $request): View
     {
-        $companyId = $request->user()->company_id;
+        $user = $request->user();
+
+        // Self-registered consumers (karigar / contractor …) have no management
+        // permissions — they scan to earn points. Show them their own scan +
+        // wallet + rewards home instead of the company-wide admin dashboard.
+        if (! $user->canAny(['products.view', 'batches.view', 'qr-codes.view', 'users.view', 'wallets.credit'])) {
+            return $this->consumerDashboard($request);
+        }
+
+        $companyId = $user->company_id;
 
         $scope = fn (Builder $query) => $companyId !== null
             ? $query->where('company_id', $companyId)
@@ -74,5 +92,37 @@ class DashboardController extends Controller
             'recentActivity',
             'topProducts',
         ));
+    }
+
+    /**
+     * The scan-to-earn home for consumer accounts: a prominent QR scan action,
+     * their wallet balance and reward-point totals.
+     */
+    private function consumerDashboard(Request $request): View
+    {
+        $user = $request->user();
+        $wallet = $this->wallets->getOrCreateWallet($user);
+
+        $stats = [
+            'balance' => (float) $wallet->balance,
+            'redeemable' => $this->redemptions->availableBalance($user),
+            'lifetime_earned' => (float) $wallet->lifetime_credited,
+            'redeemed' => (float) $wallet->lifetime_debited,
+            'total_scans' => VerificationLog::where('user_id', $user->id)->count(),
+            'points_earned' => (int) VerificationLog::where('user_id', $user->id)->sum('reward_points'),
+            'redemptions_count' => RedemptionRequest::where('user_id', $user->id)->count(),
+            'redemptions_pending' => RedemptionRequest::where('user_id', $user->id)
+                ->where('status', RedemptionRequest::STATUS_PENDING)
+                ->count(),
+        ];
+
+        $recentScans = VerificationLog::query()
+            ->with(['product:id,name,sku'])
+            ->where('user_id', $user->id)
+            ->latest('verified_at')
+            ->limit(6)
+            ->get();
+
+        return view('dashboard-consumer', compact('stats', 'wallet', 'recentScans'));
     }
 }

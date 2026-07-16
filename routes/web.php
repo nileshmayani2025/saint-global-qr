@@ -74,6 +74,10 @@ Route::get('/', fn () => redirect()->route(auth()->check() ? 'dashboard' : 'logi
 Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // In-app camera QR scanner. Decoding a code forwards to verify.show, which
+    // records the scan and (for approved users) credits reward points.
+    Route::view('scan', 'scan')->name('scan');
+
     // Catalog
     Route::resource('products', ProductController::class);
     Route::resource('brands', BrandController::class)->except('show');
