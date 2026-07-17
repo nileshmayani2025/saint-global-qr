@@ -1,0 +1,15 @@
+{
+  "appId": "com.saintgloble.verify",
+  "appName": "Saint Globle",
+  "webDir": "www",
+  "server": {
+    "url": "https://account.gopinathinfotech.com/qr/public",
+    "androidScheme": "https",
+    "cleartext": false,
+    "errorPath": "offline.html"
+  },
+  "android": {
+    "allowMixedContent": false,
+    "backgroundColor": "#060a12"
+  }
+}

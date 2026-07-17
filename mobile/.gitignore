@@ -1,0 +1,15 @@
+# Capacitor shell for the Android app. The Laravel app itself is the web content —
+# this project only wraps the live site (see capacitor.config.json server.url).
+/node_modules
+
+# Build output
+/android/app/build
+/android/build
+/android/.gradle
+/android/local.properties
+/android/app/release
+/android/capacitor-cordova-android-plugins
+*.apk
+*.aab
+*.keystore
+*.jks
