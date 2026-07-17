@@ -1,4 +1,4 @@
-# Saint Global Reward & Product Verification ERP — System Architecture
+# Saint Globle Reward & Product Verification ERP — System Architecture
 
 > Stack decision (confirmed): **Laravel 12 + Blade + TailwindCSS + Alpine.js**, **MariaDB 10.4 (MySQL-compatible)**, Redis-ready queues. Server-rendered premium UI. A versioned REST API (Sanctum) is exposed in parallel so the Capacitor mobile app can be added later without rework.
 
@@ -12,7 +12,7 @@
 │  Web Portals (Blade)      REST API (JSON)          Capacitor App (later)│
 │  Super Admin / Company /  /api/v1/*  (Sanctum)     QR scan / offline    │
 │  Dealer / Distributor /                                                 │
-│  Salesman / Saint Global / User                                             │
+│  Salesman / Saint Globle / User                                             │
 └───────────────┬───────────────────────────────┬───────────────────────┘
                 │ web (session + CSRF)           │ api (Sanctum token)
 ┌───────────────▼───────────────────────────────▼───────────────────────┐

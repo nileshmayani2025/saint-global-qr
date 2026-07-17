@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Repositories\Contracts\BannerRepositoryInterface;
 use App\Repositories\Contracts\BatchRepositoryInterface;
 use App\Repositories\Contracts\BrandRepositoryInterface;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Repositories\Contracts\CompanyRepositoryInterface;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Contracts\QrCodeRepositoryInterface;
+use App\Repositories\Eloquent\BannerRepository;
 use App\Repositories\Eloquent\BatchRepository;
 use App\Repositories\Eloquent\BrandRepository;
 use App\Repositories\Eloquent\CategoryRepository;
@@ -34,5 +36,6 @@ class RepositoryServiceProvider extends ServiceProvider
         ProductRepositoryInterface::class => ProductRepository::class,
         BatchRepositoryInterface::class => BatchRepository::class,
         QrCodeRepositoryInterface::class => QrCodeRepository::class,
+        BannerRepositoryInterface::class => BannerRepository::class,
     ];
 }

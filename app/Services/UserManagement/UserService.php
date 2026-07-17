@@ -9,10 +9,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /**
- * Handles user lifecycle: creation, updates, password hashing and role sync.
- * All writes are transactional so a user and their roles commit together.
+ * Handles user lifecycle: creation, updates and role sync. All writes are
+ * transactional so a user and their roles commit together.
  */
 class UserService
 {
@@ -47,7 +48,10 @@ class UserService
         return DB::transaction(function () use ($data, $roles): User {
             $user = new User;
             $user->fill($this->fillable($data, isCreate: true));
-            $user->password = Hash::make($data['password']);
+
+            // Sign-in is by mobile + OTP, so no password is ever used. The
+            // column is NOT NULL, so store a value nobody can authenticate with.
+            $user->password = Hash::make(Str::random(40));
             $user->save();
 
             $user->syncRoles($roles);
@@ -64,11 +68,6 @@ class UserService
     {
         return DB::transaction(function () use ($user, $data, $roles): User {
             $user->fill($this->fillable($data, isCreate: false));
-
-            if (! empty($data['password'])) {
-                $user->password = Hash::make($data['password']);
-            }
-
             $user->save();
             $user->syncRoles($roles);
 
@@ -93,6 +92,9 @@ class UserService
             'phone' => $data['phone'] ?? null,
             'company_id' => $data['company_id'] ?? null,
             'status' => $data['status'] ?? 'active',
+            // Access is granted on creation — there is no approval step. Stamped
+            // on every create path so the column never reads as "pending".
+            'approved_at' => $isCreate ? now() : null,
         ], static fn ($v) => $v !== null);
     }
 }

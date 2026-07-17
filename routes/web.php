@@ -3,8 +3,10 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Marketing\BannerController;
 use App\Http\Controllers\Product\BatchController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
@@ -23,13 +25,20 @@ use Illuminate\Support\Facades\Storage;
 |--------------------------------------------------------------------------
 | Guest authentication
 |--------------------------------------------------------------------------
+|
+| Sign-in and sign-up both take a mobile number, open an OTP challenge, and
+| finish on the shared OTP screen (see OtpController).
 */
 Route::middleware('guest')->group(function () {
     Route::get('login', [LoginController::class, 'show'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
+    Route::post('login', [LoginController::class, 'requestOtp'])->middleware('throttle:otp');
 
     Route::get('register', [RegisterController::class, 'show'])->name('register');
-    Route::post('register', [RegisterController::class, 'register']);
+    Route::post('register', [RegisterController::class, 'requestOtp'])->middleware('throttle:otp');
+
+    Route::get('otp', [OtpController::class, 'show'])->name('otp.show');
+    Route::post('otp', [OtpController::class, 'verify'])->name('otp.verify');
+    Route::post('otp/resend', [OtpController::class, 'resend'])->name('otp.resend')->middleware('throttle:otp');
 });
 
 Route::post('logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
@@ -75,13 +84,16 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // In-app camera QR scanner. Decoding a code forwards to verify.show, which
-    // records the scan and (for approved users) credits reward points.
+    // records the scan and credits reward points.
     Route::view('scan', 'scan')->name('scan');
 
     // Catalog
     Route::resource('products', ProductController::class);
     Route::resource('brands', BrandController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except('show');
+
+    // Home-carousel banners for the consumer app
+    Route::resource('banners', BannerController::class)->except('show');
 
     // Batches + QR generation
     Route::resource('batches', BatchController::class);
@@ -105,8 +117,6 @@ Route::middleware('auth')->group(function () {
 
     // Users + Roles
     Route::resource('users', UserController::class);
-    Route::post('users/{user}/approve', [UserController::class, 'approve'])->name('users.approve');
-    Route::post('users/{user}/revoke-approval', [UserController::class, 'revokeApproval'])->name('users.revoke-approval');
     Route::resource('roles', RoleController::class)->except('show');
 
     // The signed-in user's own rewards area

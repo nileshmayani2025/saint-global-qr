@@ -92,32 +92,6 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User deleted successfully.');
     }
 
-    public function approve(Request $request, User $user): RedirectResponse
-    {
-        $this->authorize('update', $user);
-
-        if (! $user->isApproved()) {
-            $user->forceFill([
-                'approved_at' => now(),
-                'approved_by' => $request->user()->id,
-            ])->save();
-        }
-
-        return redirect()->back()->with('success', "{$user->name} approved — they can now scan & verify products.");
-    }
-
-    public function revokeApproval(User $user): RedirectResponse
-    {
-        $this->authorize('update', $user);
-
-        $user->forceFill([
-            'approved_at' => null,
-            'approved_by' => null,
-        ])->save();
-
-        return redirect()->back()->with('success', "{$user->name}'s scanning access has been revoked.");
-    }
-
     /**
      * @return array<string, mixed>
      */

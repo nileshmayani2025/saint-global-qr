@@ -7,6 +7,7 @@ namespace App\Providers;
 use App\Models\User;
 use App\Services\Audit\ActivityLogger;
 use App\Support\Access\AccessControl;
+use App\Support\Phone;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -46,8 +47,9 @@ class AppServiceProvider extends ServiceProvider
             Limit::perDay(500)->by($request->ip()),
         ]);
 
-        // OTP requests — strict.
+        // OTP requests — strict, keyed on the number being verified so one
+        // caller can't burn through codes for many accounts from one IP.
         RateLimiter::for('otp', fn (Request $request) => Limit::perMinute(5)
-            ->by($request->input('identifier') ?: $request->ip()));
+            ->by(Phone::normalize($request->input('phone')) ?: $request->ip()));
     }
 }

@@ -1,6 +1,6 @@
 {
-    "name": "Saint Global Verify",
-    "short_name": "Saint Verify",
+    "name": "Saint Globle Verify",
+    "short_name": "Saint Globle",
     "description": "Verify genuine products and earn reward points.",
     "start_url": "/verify",
     "scope": "/",

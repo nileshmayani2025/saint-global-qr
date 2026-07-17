@@ -24,7 +24,6 @@
                     <div><dt class="text-slate-400">Phone</dt><dd class="font-medium">{{ $userModel->phone ?? '—' }}</dd></div>
                     <div><dt class="text-slate-400">Status</dt><dd><x-badge :status="$userModel->status" /></dd></div>
                     <div><dt class="text-slate-400">Company</dt><dd class="font-medium">{{ $userModel->company?->name ?? '—' }}</dd></div>
-                    <div><dt class="text-slate-400">Approved</dt><dd class="font-medium">{{ $userModel->isApproved() ? optional($userModel->approved_at)->format('d M Y') : 'Pending' }}</dd></div>
                     <div><dt class="text-slate-400">Last login</dt><dd class="font-medium">{{ optional($userModel->last_login_at)->diffForHumans() ?? 'Never' }}</dd></div>
                 </dl>
             </div>

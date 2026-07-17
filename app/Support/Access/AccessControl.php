@@ -59,6 +59,7 @@ final class AccessControl
         $crud = ['view', 'create', 'update', 'delete', 'restore', 'export'];
 
         return [
+            'banners' => $crud,
             'brands' => $crud,
             'categories' => $crud,
             'products' => array_merge($crud, ['import']),

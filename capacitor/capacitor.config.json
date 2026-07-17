@@ -1,6 +1,6 @@
 {
     "appId": "com.saintglobal.verify",
-    "appName": "Saint Global Verify",
+    "appName": "Saint Globle Verify",
     "webDir": "www",
     "server": {
         "url": "https://account.gopinathinfotech.com/qr/public",

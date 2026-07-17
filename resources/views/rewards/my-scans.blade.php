@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends(auth()->user()->isConsumer() ? 'layouts.consumer' : 'layouts.app')
 @section('title', 'My Scans')
 
 @section('content')

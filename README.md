@@ -1,4 +1,4 @@
-# Saint Global Reward & Product Verification ERP
+# Saint Globle Reward & Product Verification ERP
 
 A production-grade Laravel 12 ERP for QR-based product authentication, anti-counterfeit
 verification, and reward distribution. Built with a server-rendered premium UI
@@ -118,7 +118,7 @@ conventions:
 2. **Wallet** — reward & cashback wallets, ledger, statements
 3. **Reward engine** — dynamic rules, campaigns, milestones, target rewards
 4. **Redemption** — UPI / bank transfer / gift, lucky draw, spin wheel, scratch card
-5. **KYC & onboarding** — dealer / distributor / Saint Global / retailer
+5. **KYC & onboarding** — dealer / distributor / Saint Globle / retailer
 6. **Notifications** — SMS / WhatsApp / email / push (queued)
 7. **Reports & exports** — Excel / PDF, financial / reward / QR / campaign reports
 8. **Settings** — company, theme, language, currency, backup

@@ -18,6 +18,7 @@
         ['route' => 'products.index',   'label' => 'Products',    'perm' => 'products.view',   'icon' => 'M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-14L4 7m8 4v10M4 7v10l8 4'],
         ['route' => 'brands.index',     'label' => 'Brands',      'perm' => 'brands.view',     'icon' => 'M7 7h.01M7 3h5a2 2 0 011.4.6l7 7a2 2 0 010 2.8l-5 5a2 2 0 01-2.8 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z'],
         ['route' => 'categories.index', 'label' => 'Categories',  'perm' => 'categories.view', 'icon' => 'M4 6h16M4 12h16M4 18h16'],
+        ['route' => 'banners.index',    'label' => 'Banners',     'perm' => 'banners.view',    'icon' => 'M4 5a2 2 0 012-2h12a2 2 0 012 2v14l-8-4-8 4V5z'],
         ['route' => 'batches.index',    'label' => 'Batches',     'perm' => 'batches.view',    'icon' => 'M20 7L12 3 4 7m16 0l-8 4m8-4v10l-8 4M4 7l8 4m-8-4v10l8 4m0-14v14'],
         ['route' => 'qr-codes.index',   'label' => 'QR Codes',    'perm' => 'qr-codes.view',   'icon' => 'M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 3h3m3 0h.01M14 14h.01M17 20h3v-3'],
         ['route' => 'wallets.index',    'label' => 'Wallets',     'perm' => 'wallets.view',    'icon' => 'M3 10h18M7 15h.01M3 7a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7z'],
@@ -39,9 +40,9 @@
     <aside x-show="sidebar" x-cloak x-transition:enter.duration.200ms
            class="lux-sidebar fixed inset-y-0 left-0 z-40 w-[264px] flex flex-col lg:static lg:translate-x-0">
         <div class="h-[70px] flex items-center gap-3 px-5">
-            <img src="{{ asset('images/logo.png') }}" alt="Saint Globe" class="w-11 h-11 rounded-xl ring-1 ring-white/20 shadow-lg">
+            <img src="{{ asset('images/logo.png') }}" alt="Saint Globle" class="w-11 h-11 rounded-xl ring-1 ring-white/20 shadow-lg">
             <div class="leading-tight text-white">
-                <div class="font-display font-bold tracking-tight">Saint Globe</div>
+                <div class="font-display font-bold tracking-tight">Saint Globle</div>
                 <div class="text-[11px] text-white/50 font-medium">Construction Chemicals</div>
             </div>
         </div>
@@ -88,9 +89,6 @@
             </button>
             <h1 class="font-display font-bold text-xl">@yield('title', 'Dashboard')</h1>
             <div class="ml-auto flex items-center gap-2">
-                @unless (auth()->user()->isApproved())
-                    <span class="hidden sm:inline text-xs px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-300 font-semibold ring-1 ring-amber-500/25">Pending approval</span>
-                @endunless
                 <button @click="dark = !dark" class="p-2.5 rounded-xl border border-[var(--border)] hover:border-brand-400 transition" title="Toggle theme">
                     <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
                     <svg x-show="dark" x-cloak class="w-5 h-5 text-gold" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>

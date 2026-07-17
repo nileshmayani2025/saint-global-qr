@@ -14,12 +14,14 @@
                     <input name="name" value="{{ old('name', $userModel->name) }}" required class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1.5">Email</label>
-                    <input type="email" name="email" value="{{ old('email', $userModel->email) }}" required class="w-full lux-field px-3.5 py-2.5">
+                    <label class="block text-sm font-medium mb-1.5">Mobile number</label>
+                    <input name="phone" type="tel" inputmode="numeric" maxlength="10" required
+                           value="{{ old('phone', $userModel->phone) }}" class="w-full lux-field px-3.5 py-2.5">
+                    <p class="mt-1 text-xs text-slate-400">Used to sign in — 10 digits, no +91.</p>
                 </div>
                 <div>
-                    <label class="block text-sm font-medium mb-1.5">Phone</label>
-                    <input name="phone" value="{{ old('phone', $userModel->phone) }}" class="w-full lux-field px-3.5 py-2.5">
+                    <label class="block text-sm font-medium mb-1.5">Email <span class="text-slate-400">(optional)</span></label>
+                    <input type="email" name="email" value="{{ old('email', $userModel->email) }}" class="w-full lux-field px-3.5 py-2.5">
                 </div>
                 <div>
                     <label class="block text-sm font-medium mb-1.5">Status</label>
@@ -36,14 +38,6 @@
                         </select>
                     </div>
                 @endif
-                <div>
-                    <label class="block text-sm font-medium mb-1.5">Password {{ $userModel->exists ? '(leave blank to keep)' : '' }}</label>
-                    <input type="password" name="password" {{ $userModel->exists ? '' : 'required' }} class="w-full lux-field px-3.5 py-2.5">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium mb-1.5">Confirm password</label>
-                    <input type="password" name="password_confirmation" class="w-full lux-field px-3.5 py-2.5">
-                </div>
             </div>
 
             <div>

@@ -73,29 +73,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Company::class);
     }
 
+    /**
+     * Kept as an audit record of when the account was granted access. Nothing
+     * gates on it — every account can scan from the moment it is created.
+     */
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(self::class, 'approved_by');
-    }
-
-    /**
-     * Approved accounts may scan / verify QR codes. Pending accounts (freshly
-     * self-registered) can sign in and view the app but not scan until an admin
-     * approves them.
-     */
-    public function isApproved(): bool
-    {
-        return $this->approved_at !== null;
-    }
-
-    public function scopeApproved($query)
-    {
-        return $query->whereNotNull('approved_at');
-    }
-
-    public function scopePending($query)
-    {
-        return $query->whereNull('approved_at');
     }
 
     public function wallets(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -106,6 +90,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function rewardWallet(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(Wallet::class)->where('type', Wallet::TYPE_REWARD);
+    }
+
+    /**
+     * Consumers (karigar / contractor / retailer …) hold no management
+     * permissions — they scan to earn points. They get the mobile app shell
+     * and the scan-to-earn home instead of the admin dashboard.
+     */
+    public function isConsumer(): bool
+    {
+        return ! $this->canAny(['products.view', 'batches.view', 'qr-codes.view', 'users.view', 'wallets.credit']);
     }
 
     public function isActive(): bool

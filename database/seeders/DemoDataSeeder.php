@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
+use App\Models\Banner;
 use App\Models\Batch;
 use App\Models\Brand;
 use App\Models\Category;
@@ -38,11 +39,11 @@ class DemoDataSeeder extends Seeder
         Auth::login($superAdmin);
 
         $company = Company::query()->firstOrCreate(
-            ['slug' => 'saint-global'],
+            ['slug' => 'saint-globle'],
             [
-                'name' => 'Saint Global Industries',
-                'legal_name' => 'Saint Global Industries Pvt. Ltd.',
-                'email' => 'contact@saintglobal.test',
+                'name' => 'Saint Globle Industries',
+                'legal_name' => 'Saint Globle Industries Pvt. Ltd.',
+                'email' => 'contact@saintgloble.test',
                 'phone' => '18001234567',
                 'gstin' => '27ABCDE1234F1Z5',
                 'city' => 'Mumbai',
@@ -78,6 +79,39 @@ class DemoDataSeeder extends Seeder
             ['company_id' => $company->id, 'slug' => 'adhesives'],
             ['name' => 'Adhesives', 'status' => 'active', 'sort_order' => 1],
         );
+
+        // Home-carousel slides. Images are uploaded from the admin panel, so
+        // these seed without one and fall back to the brand gradient.
+        $banners = [
+            [
+                'title' => 'Win Exciting Gifts on Scanning Products',
+                'subtitle' => 'From Saint Globle',
+                'button_label' => 'Avail Now',
+                'link_url' => '/scan',
+                'sort_order' => 1,
+            ],
+            [
+                'title' => 'Earn Reward Points on Every Genuine Product',
+                'subtitle' => 'Scan the QR label to collect vCash',
+                'button_label' => 'Scan Now',
+                'link_url' => '/scan',
+                'sort_order' => 2,
+            ],
+            [
+                'title' => 'Redeem Your vCash Straight to Your Wallet',
+                'subtitle' => 'Fast payouts on approved requests',
+                'button_label' => 'View Rewards',
+                'link_url' => '/my/rewards',
+                'sort_order' => 3,
+            ],
+        ];
+
+        foreach ($banners as $data) {
+            Banner::query()->firstOrCreate(
+                ['company_id' => $company->id, 'title' => $data['title']],
+                [...$data, 'status' => 'active'],
+            );
+        }
 
         $products = [
             ['name' => 'Saint Tile Adhesive 20kg', 'sku' => 'SG-TA-20', 'mrp' => 480.00, 'reward_points' => 25],

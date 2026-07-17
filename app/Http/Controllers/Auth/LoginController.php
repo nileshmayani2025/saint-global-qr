@@ -6,7 +6,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\User;
 use App\Services\Audit\ActivityLogger;
+use App\Services\Auth\OtpService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -19,31 +21,33 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(LoginRequest $request, ActivityLogger $logger): RedirectResponse
+    /**
+     * Step 1 of sign-in: check the number belongs to an active account and open
+     * an OTP challenge. Nothing is authenticated here — OtpController completes
+     * the sign-in once the code checks out.
+     */
+    public function requestOtp(LoginRequest $request, OtpService $otp): RedirectResponse
     {
-        $credentials = $request->only('email', 'password');
-        $remember = $request->boolean('remember');
+        $phone = $request->string('phone')->toString();
 
-        if (! Auth::attempt([...$credentials, 'status' => 'active'], $remember)) {
+        $exists = User::query()
+            ->where('phone', $phone)
+            ->where('status', 'active')
+            ->exists();
+
+        if (! $exists) {
             throw ValidationException::withMessages([
-                'email' => __('These credentials do not match our records, or the account is inactive.'),
+                'phone' => __('No active account is registered with this mobile number.'),
             ]);
         }
 
-        $request->session()->regenerate();
+        $otp->start($phone, OtpService::INTENT_LOGIN);
+        $request->session()->put('auth.remember', $request->boolean('remember'));
 
-        $user = Auth::user();
-        $user->forceFill([
-            'last_login_at' => now(),
-            'last_login_ip' => $request->ip(),
-        ])->saveQuietly();
-
-        $logger->log('login', $user, "{$user->name} logged in", logName: 'auth');
-
-        return redirect()->intended(route('dashboard'));
+        return redirect()->route('otp.show');
     }
 
-    public function logout(): RedirectResponse
+    public function logout(OtpService $otp): RedirectResponse
     {
         $user = Auth::user();
 
@@ -51,6 +55,7 @@ class LoginController extends Controller
             app(ActivityLogger::class)->log('logout', $user, "{$user->name} logged out", logName: 'auth');
         }
 
+        $otp->clear();
         Auth::logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();

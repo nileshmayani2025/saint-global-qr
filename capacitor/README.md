@@ -1,6 +1,6 @@
-# Saint Global Verify — Mobile App (Capacitor)
+# Saint Globle Verify — Mobile App (Capacitor)
 
-This is the **Capacitor Android/iOS shell** for the Saint Global verification & rewards
+This is the **Capacitor Android/iOS shell** for the Saint Globle verification & rewards
 platform. It loads the live Laravel app (`server.url` in `capacitor.config.json`) and wraps
 it in a native app with splash screen, status bar and native geolocation.
 
@@ -72,7 +72,7 @@ cd android
 | Field | Value |
 |-------|-------|
 | App ID | `com.saintglobal.verify` |
-| App name | Saint Global Verify |
+| App name | Saint Globle Verify |
 | Splash / theme | Brand azure `#2ca0d4` |
 | Native plugins | App, Geolocation, Splash Screen, Status Bar |
 

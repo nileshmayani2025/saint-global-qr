@@ -26,7 +26,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-sm">
                 <thead class="bg-transparent text-left text-slate-500 dark:text-slate-400">
-                    <tr><th class="px-4 py-3 font-medium">User</th><th class="px-4 py-3 font-medium">Roles</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3 font-medium">Approval</th><th class="px-4 py-3"></th></tr>
+                    <tr><th class="px-4 py-3 font-medium">User</th><th class="px-4 py-3 font-medium">Roles</th><th class="px-4 py-3 font-medium">Status</th><th class="px-4 py-3"></th></tr>
                 </thead>
                 <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
                     @forelse ($users as $user)
@@ -42,21 +42,7 @@
                             </td>
                             <td class="px-4 py-3"><x-badge :status="$user->status" /></td>
                             <td class="px-4 py-3">
-                                @if ($user->isApproved())
-                                    <span class="text-emerald-600 text-xs font-medium">Approved</span>
-                                @else
-                                    <span class="text-amber-600 text-xs font-medium">Pending</span>
-                                @endif
-                            </td>
-                            <td class="px-4 py-3">
                                 <div class="flex items-center justify-end gap-2">
-                                    @can('users.update')
-                                        @if ($user->isApproved())
-                                            <form method="POST" action="{{ route('users.revoke-approval', $user) }}" class="inline-flex">@csrf<button title="Revoke scanning access" class="px-2.5 h-9 inline-flex items-center rounded-lg text-xs font-semibold text-amber-600 border border-amber-500/30 hover:bg-amber-500/10">Revoke</button></form>
-                                        @else
-                                            <form method="POST" action="{{ route('users.approve', $user) }}" class="inline-flex">@csrf<button title="Approve" class="px-2.5 h-9 inline-flex items-center rounded-lg text-xs font-semibold text-emerald-600 border border-emerald-500/30 hover:bg-emerald-500/10">Approve</button></form>
-                                        @endif
-                                    @endcan
                                     <x-act.view :href="route('users.show', $user)" />
                                     @can('users.update')<x-act.edit :href="route('users.edit', $user)" />@endcan
                                     @can('users.delete')<x-act.delete :action="route('users.destroy', $user)" confirm="Delete this user?" />@endcan
@@ -64,7 +50,7 @@
                             </td>
                         </tr>
                     @empty
-                        <tr><td colspan="5" class="px-4 py-10 text-center text-slate-400">No users found.</td></tr>
+                        <tr><td colspan="4" class="px-4 py-10 text-center text-slate-400">No users found.</td></tr>
                     @endforelse
                 </tbody>
             </table>

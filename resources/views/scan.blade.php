@@ -1,19 +1,8 @@
-@extends('layouts.app')
+@extends(auth()->user()->isConsumer() ? 'layouts.consumer' : 'layouts.app')
 @section('title', 'Scan QR')
 
 @section('content')
-    @php $approved = auth()->user()->isApproved(); @endphp
-
     <div class="max-w-md mx-auto">
-        @unless ($approved)
-            <div class="lux-card p-5 mb-5 border-amber-400/40">
-                <div class="flex gap-3 text-sm">
-                    <svg class="w-5 h-5 shrink-0 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>
-                    <div>Your account is pending approval. You can still open a code, but reward points are credited only after an admin approves you.</div>
-                </div>
-            </div>
-        @endunless
-
         <div class="lux-card p-5">
             <h2 class="font-semibold mb-1">Scan product QR</h2>
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Allow camera access and hold the QR label inside the frame.</p>

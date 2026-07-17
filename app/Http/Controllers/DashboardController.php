@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
+use App\Models\Banner;
 use App\Models\Batch;
+use App\Models\Company;
 use App\Models\Product;
 use App\Models\QrCode;
 use App\Models\RedemptionRequest;
@@ -29,10 +31,7 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Self-registered consumers (karigar / contractor …) have no management
-        // permissions — they scan to earn points. Show them their own scan +
-        // wallet + rewards home instead of the company-wide admin dashboard.
-        if (! $user->canAny(['products.view', 'batches.view', 'qr-codes.view', 'users.view', 'wallets.credit'])) {
+        if ($user->isConsumer()) {
             return $this->consumerDashboard($request);
         }
 
@@ -120,9 +119,26 @@ class DashboardController extends Controller
             ->with(['product:id,name,sku'])
             ->where('user_id', $user->id)
             ->latest('verified_at')
-            ->limit(6)
+            ->limit(5)
             ->get();
 
-        return view('dashboard-consumer', compact('stats', 'wallet', 'recentScans'));
+        // Consumers have no company of their own, so fall back to the first
+        // company's content rather than showing an empty home screen.
+        $companyId = $user->company_id ?? Company::query()->orderBy('id')->value('id');
+
+        $banners = Banner::query()
+            ->active()
+            ->when($companyId, fn (Builder $q, $id) => $q->where('company_id', $id))
+            ->ordered()
+            ->get();
+
+        $products = Product::query()
+            ->where('status', 'active')
+            ->when($companyId, fn (Builder $q, $id) => $q->where('company_id', $id))
+            ->orderBy('name')
+            ->limit(6)
+            ->get(['id', 'name', 'sku', 'image_path', 'reward_points']);
+
+        return view('dashboard-consumer', compact('stats', 'wallet', 'recentScans', 'banners', 'products'));
     }
 }
