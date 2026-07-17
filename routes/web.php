@@ -73,6 +73,40 @@ Route::get('media/{path}', function (string $path) {
     ]);
 })->where('path', '.*')->name('media');
 
+/*
+|--------------------------------------------------------------------------
+| PWA manifest
+|--------------------------------------------------------------------------
+| Built here rather than kept as a static public/manifest.webmanifest so every
+| URL derives from APP_URL. On live the app sits in a subdirectory (/qr/public),
+| where the hard-coded "/images/pwa-192.png" paths resolved to the domain root
+| and 404'd, leaving the installed app with no icon.
+*/
+Route::get('manifest.webmanifest', function () {
+    $icons = collect([192, 512])
+        ->crossJoin(['any', 'maskable'])
+        ->map(fn (array $pair) => [
+            'src' => asset("images/pwa-{$pair[0]}.png"),
+            'sizes' => "{$pair[0]}x{$pair[0]}",
+            'type' => 'image/png',
+            'purpose' => $pair[1],
+        ])
+        ->all();
+
+    return response()->json([
+        'name' => 'Saint Globle Verify',
+        'short_name' => 'Saint Globle',
+        'description' => 'Verify genuine products and earn reward points.',
+        'start_url' => route('verify.form'),
+        'scope' => url('/').'/',
+        'display' => 'standalone',
+        'orientation' => 'portrait',
+        'background_color' => '#0f172a',
+        'theme_color' => '#2ca0d4',
+        'icons' => $icons,
+    ], options: JSON_UNESCAPED_SLASHES)->header('Content-Type', 'application/manifest+json');
+})->name('manifest');
+
 Route::get('/', fn () => redirect()->route(auth()->check() ? 'dashboard' : 'login'));
 
 /*

@@ -23,8 +23,9 @@
              x-init="start()" @mouseenter="stop()" @mouseleave="start()" class="mb-5">
             <div class="relative">
                 <?php $__currentLoopData = $banners; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $banner): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    
                     <div x-show="active === <?php echo e($i); ?>" x-transition:enter.duration.400ms x-transition:enter.opacity.0
-                         class="<?php echo \Illuminate\Support\Arr::toCssClasses(['relative overflow-hidden rounded-2xl', 'hidden' => $i > 0]); ?>">
+                         x-cloak class="relative overflow-hidden rounded-2xl">
                         <?php if($banner->image_path): ?>
                             <img src="<?php echo e(asset('media/'.$banner->image_path)); ?>" alt=""
                                  class="absolute inset-0 w-full h-full object-cover">

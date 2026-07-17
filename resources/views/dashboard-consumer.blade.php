@@ -24,8 +24,10 @@
              x-init="start()" @mouseenter="stop()" @mouseleave="start()" class="mb-5">
             <div class="relative">
                 @foreach ($banners as $i => $banner)
+                    {{-- x-cloak, not a "hidden" class: x-show only toggles inline display, so a
+                         class-based hide would win and the slide could never be revealed. --}}
                     <div x-show="active === {{ $i }}" x-transition:enter.duration.400ms x-transition:enter.opacity.0
-                         @class(['relative overflow-hidden rounded-2xl', 'hidden' => $i > 0])>
+                         x-cloak class="relative overflow-hidden rounded-2xl">
                         @if ($banner->image_path)
                             <img src="{{ asset('media/'.$banner->image_path) }}" alt=""
                                  class="absolute inset-0 w-full h-full object-cover">

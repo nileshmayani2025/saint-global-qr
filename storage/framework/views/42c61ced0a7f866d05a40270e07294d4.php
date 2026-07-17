@@ -8,6 +8,9 @@
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     <title><?php echo $__env->yieldContent('title', 'Home'); ?> · <?php echo e(config('app.name')); ?></title>
     <link rel="icon" href="<?php echo e(asset('images/logo.png')); ?>">
+    <link rel="apple-touch-icon" href="<?php echo e(asset('images/apple-touch-icon.png')); ?>">
+    <link rel="manifest" href="<?php echo e(route('manifest')); ?>">
+    <meta name="theme-color" content="#2ca0d4">
     <script src="https://cdn.tailwindcss.com"></script>
     <?php echo $__env->make('partials.theme', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
