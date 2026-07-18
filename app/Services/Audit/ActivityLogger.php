@@ -18,6 +18,11 @@ class ActivityLogger
     /**
      * Record an activity entry.
      *
+     * $causerId accepts a string as well as an int because a user id can arrive
+     * as a numeric string — some MySQL/PDO configs (e.g. emulated prepares on
+     * shared hosting) return integer columns as strings, so `$model->user_id`
+     * is "3" rather than 3. The causer_id column stores it either way.
+     *
      * @param  array<string, mixed>  $properties
      */
     public function log(
@@ -26,7 +31,7 @@ class ActivityLogger
         ?string $description = null,
         array $properties = [],
         string $logName = 'default',
-        ?int $causerId = null,
+        int|string|null $causerId = null,
     ): ActivityLog {
         $context = $this->context();
 
