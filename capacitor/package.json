@@ -1,6 +1,6 @@
 {
     "name": "saint-global-verify-mobile",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "private": true,
     "description": "Saint Global Verify — Capacitor Android/iOS shell for the verification & rewards app.",
     "scripts": {

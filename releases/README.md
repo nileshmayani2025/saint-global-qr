@@ -5,9 +5,10 @@ shell that loads the live site (`https://account.gopinathinfotech.com/qr/public/
 — so most updates ship by deploying the web app; a new APK is only needed when
 the native config (URL, name, icon, plugins, version) changes.
 
-| Version | versionCode | Opens | File | Date |
-|---------|-------------|-------|------|------|
-| 1.0.0   | 1           | `/app/login` (mobile OTP) | [v1.0.0/Saint-Globle-Verify-v1.0.0.apk](v1.0.0/Saint-Globle-Verify-v1.0.0.apk) | 2026-07-18 |
+| Version | versionCode | Opens | File | Date | Notes |
+|---------|-------------|-------|------|------|-------|
+| 1.0.1   | 2           | `/app/login` (mobile OTP) | [v1.0.1/Saint-Globle-Verify-v1.0.1.apk](v1.0.1/Saint-Globle-Verify-v1.0.1.apk) | 2026-07-18 | App icon set to the Saint Globle logo |
+| 1.0.0   | 1           | `/app/login` (mobile OTP) | [v1.0.0/Saint-Globle-Verify-v1.0.0.apk](v1.0.0/Saint-Globle-Verify-v1.0.0.apk) | 2026-07-18 | Initial build |
 
 ## Install
 Debug build — on the phone enable **Install unknown apps** for your file
