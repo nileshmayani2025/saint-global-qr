@@ -7,6 +7,7 @@ the native config (URL, name, icon, plugins, version) changes.
 
 | Version | versionCode | Opens | File | Date | Notes |
 |---------|-------------|-------|------|------|-------|
+| 1.0.2   | 3           | `/app/login` (mobile OTP) | [v1.0.2/Saint-Globle-Verify-v1.0.2.apk](v1.0.2/Saint-Globle-Verify-v1.0.2.apk) | 2026-07-18 | Splash / boot screen shows the logo (all densities + Android 12+) |
 | 1.0.1   | 2           | `/app/login` (mobile OTP) | [v1.0.1/Saint-Globle-Verify-v1.0.1.apk](v1.0.1/Saint-Globle-Verify-v1.0.1.apk) | 2026-07-18 | App icon set to the Saint Globle logo |
 | 1.0.0   | 1           | `/app/login` (mobile OTP) | [v1.0.0/Saint-Globle-Verify-v1.0.0.apk](v1.0.0/Saint-Globle-Verify-v1.0.0.apk) | 2026-07-18 | Initial build |
 

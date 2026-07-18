@@ -80,6 +80,60 @@ file_put_contents(
     "$resDir/values/ic_launcher_background.xml",
     "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n    <color name=\"ic_launcher_background\">$hex</color>\n</resources>\n"
 );
-echo "ic_launcher_background => $hex\nDONE\n";
+echo "ic_launcher_background => $hex\n";
+
+// --- Splash screen (the "fresh screen" shown while the app boots) ---------
+// Launch theme uses @drawable/splash; render the logo centred on the brand
+// blue for every density (portrait + landscape) plus the base drawable.
+[$br, $bg, $bb] = [($c >> 16) & 0xFF, ($c >> 8) & 0xFF, $c & 0xFF];
+
+function splash($logo, $sw, $sh, $w, $h, $br, $bg, $bb) {
+    $img = imagecreatetruecolor($w, $h);
+    imagefilledrectangle($img, 0, 0, $w, $h, imagecolorallocate($img, $br, $bg, $bb));
+    // Logo ~42% of the shorter side, centred.
+    $d = (int) round(min($w, $h) * 0.42);
+    imagealphablending($img, true);
+    imagecopyresampled($img, $logo, (int) (($w - $d) / 2), (int) (($h - $d) / 2), 0, 0, $d, $d, $sw, $sh);
+    return $img;
+}
+
+$splashes = [
+    'drawable' => [512, 512],
+    'drawable-port-mdpi' => [320, 480], 'drawable-land-mdpi' => [480, 320],
+    'drawable-port-hdpi' => [480, 800], 'drawable-land-hdpi' => [800, 480],
+    'drawable-port-xhdpi' => [720, 1280], 'drawable-land-xhdpi' => [1280, 720],
+    'drawable-port-xxhdpi' => [960, 1600], 'drawable-land-xxhdpi' => [1600, 960],
+    'drawable-port-xxxhdpi' => [1280, 1920], 'drawable-land-xxxhdpi' => [1920, 1280],
+];
+foreach ($splashes as $dir => [$w, $h]) {
+    $path = "$resDir/$dir";
+    if (! is_dir($path)) {
+        mkdir($path, 0777, true);
+    }
+    $s = splash($logo, $sw, $sh, $w, $h, $br, $bg, $bb);
+    imagepng($s, "$path/splash.png");
+    imagedestroy($s);
+}
+echo "splash screens rendered (logo on $hex)\n";
+
+// Android 12+ splash uses the platform API, not the background drawable. Write a
+// values-v31 launch theme so the boot screen shows the logo on the brand blue.
+$v31 = "$resDir/values-v31";
+if (! is_dir($v31)) {
+    mkdir($v31, 0777, true);
+}
+file_put_contents("$v31/styles.xml", <<<'XML'
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ platform splash: logo on brand blue (see gen-icons.php). -->
+    <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+    </style>
+</resources>
+
+XML);
+echo "values-v31/styles.xml written\nDONE\n";
 
 imagedestroy($logo);
