@@ -3,7 +3,7 @@
     "appName": "Saint Globle Verify",
     "webDir": "www",
     "server": {
-        "url": "https://account.gopinathinfotech.com/qr/public",
+        "url": "https://account.gopinathinfotech.com/qr/public/app/login",
         "androidScheme": "https"
     },
     "backgroundColor": "#0f172a",
