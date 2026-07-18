@@ -35,12 +35,21 @@
                 handled = true;
                 status.textContent = 'Code detected — verifying…';
 
-                // QR labels encode the full verify URL; navigate straight to it.
-                // Anything else is treated as a raw product code.
-                if (/^https?:\/\//i.test(text)) {
+                text = (text || '').trim();
+
+                // QR labels encode a full verify URL, but older batches baked a
+                // different host / base path (e.g. a dev machine's IP) that 404s
+                // on a phone. Pull the code out of any ".../verify/<code>" and
+                // re-point it at THIS site so every label resolves here; anything
+                // else is treated as a raw product code.
+                var m = text.match(/\/verify\/([^\/?#\s]+)/i);
+                if (m) {
+                    window.location.href = VERIFY_BASE + '/' + encodeURIComponent(decodeURIComponent(m[1]));
+                } else if (/^https?:\/\//i.test(text)) {
+                    // An unrelated URL we don't recognise — follow it as-is.
                     window.location.href = text;
                 } else {
-                    window.location.href = VERIFY_BASE + '/' + encodeURIComponent(text.trim());
+                    window.location.href = VERIFY_BASE + '/' + encodeURIComponent(text);
                 }
             }
 

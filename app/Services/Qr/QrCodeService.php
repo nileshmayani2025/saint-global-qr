@@ -116,6 +116,27 @@ class QrCodeService
     }
 
     /**
+     * Re-point an existing code at the current APP_URL and re-render its image.
+     * Run after APP_URL changes — e.g. codes generated against a dev host now
+     * served from the live domain — so both the stored short_url and the printed
+     * PNG resolve. Returns true when the code's URL actually changed.
+     */
+    public function rebase(QrCodeModel $qr): bool
+    {
+        $fresh = $this->verifyUrl($qr->code);
+
+        if ($qr->short_url === $fresh) {
+            return false;
+        }
+
+        $qr->short_url = $fresh;
+        $qr->image_path = $this->renderImage($qr);
+        $qr->saveQuietly();
+
+        return true;
+    }
+
+    /**
      * Render the QR PNG to the public disk and return its relative path.
      */
     private function renderImage(QrCodeModel $qr): string
