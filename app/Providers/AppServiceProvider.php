@@ -51,5 +51,10 @@ class AppServiceProvider extends ServiceProvider
         // caller can't burn through codes for many accounts from one IP.
         RateLimiter::for('otp', fn (Request $request) => Limit::perMinute(5)
             ->by(Phone::normalize($request->input('phone')) ?: $request->ip()));
+
+        // Admin panel sign-in — keyed on the email being tried plus IP, so a
+        // password-guessing attempt is throttled without locking out others.
+        RateLimiter::for('login', fn (Request $request) => Limit::perMinute(6)
+            ->by(strtolower((string) $request->input('email')).'|'.$request->ip()));
     }
 }

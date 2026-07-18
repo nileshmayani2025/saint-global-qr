@@ -95,7 +95,7 @@ class OtpController extends Controller
     {
         $this->otp->clear();
 
-        return redirect()->route('login')->with(
+        return redirect()->route('app.login')->with(
             'info',
             __('Your code expired. Please enter your mobile number again.'),
         );

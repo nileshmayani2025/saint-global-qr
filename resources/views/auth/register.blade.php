@@ -41,6 +41,6 @@
     </form>
 
     <p class="mt-6 text-sm text-center text-slate-500 dark:text-slate-400">
-        Already registered? <a href="{{ route('login') }}" class="text-brand-600 font-medium hover:underline">Sign in</a>
+        Already registered? <a href="{{ route('app.login') }}" class="text-brand-600 font-medium hover:underline">Sign in</a>
     </p>
 @endsection

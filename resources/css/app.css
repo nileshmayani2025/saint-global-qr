@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/*
+ | The layouts toggle dark mode with a `dark` class on <html> (Alpine), so keep
+ | the class strategy instead of Tailwind v4's default prefers-color-scheme.
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ | Brand palette and fonts — these mirror the values that used to live in the
+ | inline `tailwind.config` when the app loaded Tailwind from the Play CDN. They
+ | back utilities like `bg-brand-600`, `text-brand-400`, `ring-brand-500`, and
+ | the `font-display` family. The `.lux-*` component classes and CSS variables
+ | stay in resources/views/partials/theme.blade.php.
+ */
+@theme {
+    --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+    --font-display: "Sora", sans-serif;
+
+    --color-brand-50: #f0f9fd;
+    --color-brand-100: #ddf0f9;
+    --color-brand-200: #bce3f2;
+    --color-brand-300: #8ccfe8;
+    --color-brand-400: #54b3d8;
+    --color-brand-500: #2ca0d4;
+    --color-brand-600: #2185b8;
+    --color-brand-700: #1d6d97;
+    --color-brand-800: #1b5a7c;
+    --color-brand-900: #194c68;
+
+    --color-gold-300: #f0dca6;
+    --color-gold-400: #e7c884;
+    --color-gold-500: #d9b25f;
+    --color-gold-600: #c1974a;
+}

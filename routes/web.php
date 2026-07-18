@@ -26,12 +26,19 @@ use Illuminate\Support\Facades\Storage;
 | Guest authentication
 |--------------------------------------------------------------------------
 |
-| Sign-in and sign-up both take a mobile number, open an OTP challenge, and
-| finish on the shared OTP screen (see OtpController).
+| Two separate front doors:
+|   - The web admin panel (/login) signs in with email + password.
+|   - The consumer app (/app/login, the PWA) signs in with a mobile number and
+|     an OTP, and self-registration continues on the shared OTP screen.
 */
 Route::middleware('guest')->group(function () {
+    // Admin / staff panel — credential sign-in.
     Route::get('login', [LoginController::class, 'show'])->name('login');
-    Route::post('login', [LoginController::class, 'requestOtp'])->middleware('throttle:otp');
+    Route::post('login', [LoginController::class, 'authenticate'])->middleware('throttle:login');
+
+    // Consumer app — mobile number + OTP.
+    Route::get('app/login', [LoginController::class, 'showApp'])->name('app.login');
+    Route::post('app/login', [LoginController::class, 'requestOtp'])->name('app.login.otp')->middleware('throttle:otp');
 
     Route::get('register', [RegisterController::class, 'show'])->name('register');
     Route::post('register', [RegisterController::class, 'requestOtp'])->middleware('throttle:otp');

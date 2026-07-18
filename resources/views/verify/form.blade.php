@@ -15,6 +15,6 @@
     </form>
 
     <p class="mt-6 text-center text-sm text-slate-500 dark:text-slate-400">
-        <a href="{{ route('login') }}" class="text-brand-600 font-medium hover:underline">Sign in</a> to earn reward points.
+        <a href="{{ route('app.login') }}" class="text-brand-600 font-medium hover:underline">Sign in</a> to earn reward points.
     </p>
 @endsection

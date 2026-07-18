@@ -2,15 +2,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
-<script>
-    tailwind.config = { darkMode: 'class', theme: { extend: {
-        fontFamily: { sans: ['"Plus Jakarta Sans"','system-ui','sans-serif'], display: ['Sora','sans-serif'] },
-        colors: {
-            brand: { 50:'#f0f9fd',100:'#ddf0f9',200:'#bce3f2',300:'#8ccfe8',400:'#54b3d8',500:'#2ca0d4',600:'#2185b8',700:'#1d6d97',800:'#1b5a7c',900:'#194c68' },
-            gold:  { 300:'#f0dca6',400:'#e7c884',500:'#d9b25f',600:'#c1974a' },
-        },
-    } } }
-</script>
 <style>
     :root{
         --bg:#eaf0f7; --panel:#ffffff; --panel-2:#f7fafd;

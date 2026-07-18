@@ -64,7 +64,7 @@
     </form>
 
     <div class="mt-6 flex items-center justify-center gap-4 text-sm">
-        <a href="{{ route($registering ? 'register' : 'login') }}" class="text-slate-500 dark:text-slate-400 hover:text-brand-600">
+        <a href="{{ route($registering ? 'register' : 'app.login') }}" class="text-slate-500 dark:text-slate-400 hover:text-brand-600">
             Change number
         </a>
         <span class="text-slate-300 dark:text-slate-700">·</span>
