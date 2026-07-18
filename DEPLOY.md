@@ -4,8 +4,10 @@ The app now uses **compiled assets** instead of the Tailwind Play CDN, so the
 browser no longer compiles CSS on every page load. Follow these steps on the
 live server to build and cache everything for full speed.
 
-`/vendor`, `/node_modules`, `/public/build` and `.env` are git-ignored, so they
-are built on the server — they are **not** shipped in the repo.
+`/vendor`, `/node_modules` and `.env` are git-ignored (built/set on the server).
+**`/public/build` IS committed** — the shared cPanel host has no Node, so the
+compiled CSS/JS ship in the repo. Whenever you change CSS/JS, run `npm run build`
+locally and commit the new `public/build/` output.
 
 ## 1. Live `.env` (once)
 
@@ -23,9 +25,8 @@ Everything else (DB, mail, etc.) stays as your live values.
 # PHP dependencies (no dev tools)
 composer install --no-dev --optimize-autoloader
 
-# Frontend assets → public/build
-npm ci
-npm run build
+# Frontend assets already committed in public/build (no Node needed on server).
+# Only rebuild if you have Node available: npm ci && npm run build
 
 # DB
 php artisan migrate --force
