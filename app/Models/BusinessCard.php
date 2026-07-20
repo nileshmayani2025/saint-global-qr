@@ -30,6 +30,11 @@ class BusinessCard extends Model
     /** Long enough that the public URL cannot be guessed or enumerated. */
     private const SLUG_LENGTH = 20;
 
+    /** @see User::casts() for why foreign keys are cast explicitly. */
+    protected $casts = [
+        'user_id' => 'integer',
+    ];
+
     protected $fillable = [
         'user_id',
         'slug',

@@ -30,6 +30,7 @@ class PushSubscription extends Model
     ];
 
     protected $casts = [
+        'user_id' => 'integer',
         'last_used_at' => 'datetime',
     ];
 

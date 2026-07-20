@@ -35,7 +35,9 @@ class MyNotificationController extends Controller
      */
     public function read(Request $request, PushNotificationRecipient $recipient): RedirectResponse
     {
-        abort_unless($recipient->user_id === $request->user()->id, 403);
+        // Compared as integers: foreign keys arrive as strings from a PDO with
+        // emulated prepares, which would 403 a user out of their own row.
+        abort_unless((int) $recipient->user_id === (int) $request->user()->id, 403);
 
         $recipient->forceFill(['read_at' => now()])->save();
 

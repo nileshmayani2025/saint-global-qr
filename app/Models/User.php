@@ -64,6 +64,15 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function casts(): array
     {
         return [
+            // Foreign keys are cast explicitly: PDO hands integer columns back
+            // as strings on some servers (the live one included), and an
+            // uncast key compared against a model's own id — which Eloquent
+            // always casts — silently never matches.
+            'company_id' => 'integer',
+            'country_id' => 'integer',
+            'state_id' => 'integer',
+            'city_id' => 'integer',
+            'last_seen_trading_video_id' => 'integer',
             'email_verified_at' => 'datetime',
             'phone_verified_at' => 'datetime',
             'approved_at' => 'datetime',

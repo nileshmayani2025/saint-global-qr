@@ -17,7 +17,9 @@ class WalletPolicy
     public function view(User $user, Wallet $wallet): bool
     {
         // Owners can always see their own wallet; staff need the permission + company match.
-        if ($wallet->user_id === $user->id) {
+        // Compared as integers — foreign keys come back as strings from a PDO
+        // with emulated prepares, which would lock an owner out of their own row.
+        if ((int) $wallet->user_id === (int) $user->id) {
             return true;
         }
 

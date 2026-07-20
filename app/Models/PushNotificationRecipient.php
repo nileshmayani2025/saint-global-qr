@@ -26,6 +26,8 @@ class PushNotificationRecipient extends Model
     ];
 
     protected $casts = [
+        'push_notification_id' => 'integer',
+        'user_id' => 'integer',
         'read_at' => 'datetime',
     ];
 

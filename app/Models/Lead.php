@@ -43,6 +43,15 @@ class Lead extends Model
         'status',
     ];
 
+    /** @see User::casts() for why foreign keys are cast explicitly. */
+    protected $casts = [
+        'company_id' => 'integer',
+        'country_id' => 'integer',
+        'state_id' => 'integer',
+        'city_id' => 'integer',
+        'created_by' => 'integer',
+    ];
+
     /**
      * @return list<string>
      */

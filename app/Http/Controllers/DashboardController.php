@@ -39,7 +39,10 @@ class DashboardController extends Controller
             return $this->consumerDashboard($request);
         }
 
-        $companyId = $user->company_id;
+        // Cast rather than trust the driver: with emulated prepares (the live
+        // server's setup) PDO hands back integer columns as strings, and the
+        // ?int parameters below are enforced by declare(strict_types=1).
+        $companyId = $user->company_id === null ? null : (int) $user->company_id;
 
         $scope = fn (Builder $query) => $companyId !== null
             ? $query->where('company_id', $companyId)

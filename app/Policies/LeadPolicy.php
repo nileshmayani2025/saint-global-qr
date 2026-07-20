@@ -54,6 +54,10 @@ class LeadPolicy
 
     private function ownsOrSeesAll(User $user, Lead $lead): bool
     {
-        return $user->can('leads.view-all') || $lead->created_by === $user->id;
+        // (int) on both sides: Eloquent casts a model's own id, but not foreign
+        // keys, so on a server whose PDO returns strings a strict comparison of
+        // created_by against id is never true — and an owner is locked out of
+        // their own lead.
+        return $user->can('leads.view-all') || (int) $lead->created_by === (int) $user->id;
     }
 }

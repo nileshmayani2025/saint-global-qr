@@ -17,7 +17,9 @@ class RedemptionRequestPolicy
 
     public function view(User $user, RedemptionRequest $request): bool
     {
-        if ($request->user_id === $user->id) {
+        // Integer comparison — see WalletPolicy: string foreign keys would deny
+        // a user their own redemption.
+        if ((int) $request->user_id === (int) $user->id) {
             return true;
         }
 
