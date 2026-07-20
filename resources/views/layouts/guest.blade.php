@@ -30,5 +30,10 @@
             <p class="mt-6 text-center text-xs text-[var(--muted)]">&copy; {{ date('Y') }} Saint Globle · A Construction Chemicals</p>
         </div>
     </div>
+
+{{-- Sign-in is exactly where someone stuck needs the helpline most. --}}
+@include('partials.support-buttons')
+@include('partials.toast')
+@stack('scripts')
 </body>
 </html>

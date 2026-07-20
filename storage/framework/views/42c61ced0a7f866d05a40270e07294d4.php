@@ -11,9 +11,8 @@
     <link rel="apple-touch-icon" href="<?php echo e(asset('images/apple-touch-icon.png')); ?>">
     <link rel="manifest" href="<?php echo e(route('manifest')); ?>">
     <meta name="theme-color" content="#2ca0d4">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
     <?php echo $__env->make('partials.theme', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <style>
         /* Sit clear of the Android gesture bar / iOS home indicator. */
         .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -100,6 +99,12 @@
         </div>
     </nav>
 </div>
+
+
+<?php echo $__env->make('partials.support-buttons', ['supportOffset' => 'bottom-24'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php echo $__env->make('partials.toast', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php echo $__env->make('partials.push', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+<?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 </html>
 <?php /**PATH E:\xampp\htdocs\Saint Global\resources\views/layouts/consumer.blade.php ENDPATH**/ ?>

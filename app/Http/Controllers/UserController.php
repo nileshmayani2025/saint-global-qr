@@ -9,6 +9,7 @@ use App\Models\Company;
 use App\Models\User;
 use App\Services\UserManagement\UserService;
 use App\Support\Access\AccessControl;
+use App\Support\Geo\LocationOptions;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -41,6 +42,7 @@ class UserController extends Controller
             'assignedRoles' => [],
             'roles' => $this->assignableRoles(),
             'companies' => $this->companies(),
+            ...LocationOptions::all(),
         ]);
     }
 
@@ -57,7 +59,7 @@ class UserController extends Controller
     {
         $this->authorize('view', $user);
 
-        $user->load('roles:id,name', 'company:id,name', 'wallets');
+        $user->load('roles:id,name', 'company:id,name', 'country:id,name', 'state:id,name', 'city:id,name', 'wallets');
 
         return view('users.show', ['userModel' => $user]);
     }
@@ -71,6 +73,7 @@ class UserController extends Controller
             'assignedRoles' => $user->getRoleNames()->all(),
             'roles' => $this->assignableRoles(),
             'companies' => $this->companies(),
+            ...LocationOptions::all(),
         ]);
     }
 

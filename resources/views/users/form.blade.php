@@ -40,6 +40,13 @@
                 @endif
             </div>
 
+            <div class="lux-divider"></div>
+            <div class="space-y-5">
+                <p class="text-sm font-semibold">Location</p>
+                @include('partials.location-fields', ['locationOwner' => $userModel])
+            </div>
+            <div class="lux-divider"></div>
+
             <div>
                 <label class="block text-sm font-medium mb-2">Roles</label>
                 <div class="grid sm:grid-cols-3 gap-2">

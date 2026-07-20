@@ -40,6 +40,11 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'password',
         'company_id',
+        'country_id',
+        'state_id',
+        'city_id',
+        'address',
+        'last_seen_trading_video_id',
         'avatar_path',
         'status',
         'approved_at',
@@ -73,6 +78,21 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Company::class);
     }
 
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
+    public function state(): BelongsTo
+    {
+        return $this->belongsTo(State::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
     /**
      * Kept as an audit record of when the account was granted access. Nothing
      * gates on it — every account can scan from the moment it is created.
@@ -85,6 +105,24 @@ class User extends Authenticatable implements MustVerifyEmail
     public function wallets(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Wallet::class);
+    }
+
+    public function pushSubscriptions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PushSubscription::class);
+    }
+
+    /**
+     * The user's in-app notification inbox rows (not the campaigns themselves).
+     */
+    public function notificationRecipients(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(PushNotificationRecipient::class);
+    }
+
+    public function unreadNotificationCount(): int
+    {
+        return $this->notificationRecipients()->whereNull('read_at')->count();
     }
 
     public function rewardWallet(): \Illuminate\Database\Eloquent\Relations\HasOne

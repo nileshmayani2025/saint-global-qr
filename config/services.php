@@ -28,6 +28,34 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Firebase Cloud Messaging (web push)
+    |--------------------------------------------------------------------------
+    | "credentials" points at the service-account JSON downloaded from
+    | Firebase Console → Project settings → Service accounts. It is used to mint
+    | the OAuth token for the FCM HTTP v1 API (the legacy server-key API was
+    | switched off in 2024).
+    |
+    | The "web" block is the public config handed to the browser SDK — these
+    | values are not secrets and appear in page source by design.
+    */
+    'firebase' => [
+        'project_id' => env('FIREBASE_PROJECT_ID'),
+        'credentials' => env('FIREBASE_CREDENTIALS', storage_path('app/firebase/service-account.json')),
+
+        'web' => [
+            'api_key' => env('FIREBASE_WEB_API_KEY'),
+            'auth_domain' => env('FIREBASE_WEB_AUTH_DOMAIN'),
+            'project_id' => env('FIREBASE_PROJECT_ID'),
+            'storage_bucket' => env('FIREBASE_WEB_STORAGE_BUCKET'),
+            'messaging_sender_id' => env('FIREBASE_WEB_MESSAGING_SENDER_ID'),
+            'app_id' => env('FIREBASE_WEB_APP_ID'),
+            // Web Push certificate key pair (Cloud Messaging → Web configuration).
+            'vapid_key' => env('FIREBASE_WEB_VAPID_KEY'),
+        ],
+    ],
+
     'slack' => [
         'notifications' => [
             'bot_user_oauth_token' => env('SLACK_BOT_USER_OAUTH_TOKEN'),

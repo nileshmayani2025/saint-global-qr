@@ -29,6 +29,16 @@
             </div>
 
             <div class="lux-card p-6">
+                <h3 class="font-semibold mb-4">Location</h3>
+                <dl class="grid sm:grid-cols-2 gap-4 text-sm">
+                    <div><dt class="text-slate-400">Country</dt><dd class="font-medium">{{ $userModel->country?->name ?? '—' }}</dd></div>
+                    <div><dt class="text-slate-400">State</dt><dd class="font-medium">{{ $userModel->state?->name ?? '—' }}</dd></div>
+                    <div><dt class="text-slate-400">City</dt><dd class="font-medium">{{ $userModel->city?->name ?? '—' }}</dd></div>
+                    <div class="sm:col-span-2"><dt class="text-slate-400">Address</dt><dd class="font-medium whitespace-pre-line">{{ $userModel->address ?: '—' }}</dd></div>
+                </dl>
+            </div>
+
+            <div class="lux-card p-6">
                 <h3 class="font-semibold mb-4">Wallets</h3>
                 <div class="space-y-2 text-sm">
                     @forelse ($userModel->wallets as $wallet)

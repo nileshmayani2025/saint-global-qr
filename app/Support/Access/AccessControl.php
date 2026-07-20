@@ -62,13 +62,29 @@ final class AccessControl
             'banners' => $crud,
             'brands' => $crud,
             'categories' => $crud,
+            // Global geography reference data.
+            'countries' => $crud,
+            'states' => $crud,
+            'cities' => $crud,
             'products' => array_merge($crud, ['import']),
+            'trading-videos' => $crud,
             'batches' => $crud,
             'qr-codes' => ['view', 'generate', 'print', 'block', 'export'],
             'wallets' => ['view', 'credit', 'debit', 'export'],
             'redemptions' => ['view', 'create', 'approve', 'reject', 'export'],
+            // "view-all" widens leads.view from "the ones I captured" to the
+            // whole company pipeline, so a salesman can be given the module
+            // without seeing everyone else's enquiries.
+            'leads' => array_merge($crud, ['view-all']),
+            // Admin oversight only — a user always manages their own card.
+            'business-cards' => ['view', 'update', 'delete', 'export'],
             'users' => $crud,
             'roles' => ['view', 'create', 'update', 'delete'],
+            // Site-wide settings (helpline / WhatsApp shown on every page).
+            'settings' => ['view', 'update'],
+            // "send" is separate from "create" so drafting and broadcasting can
+            // be granted independently.
+            'notifications' => ['view', 'create', 'update', 'delete', 'send'],
         ];
     }
 

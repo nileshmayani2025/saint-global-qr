@@ -100,5 +100,11 @@
         </div>
     </nav>
 </div>
+
+{{-- Lifted clear of the fixed bottom nav so the two never overlap. --}}
+@include('partials.support-buttons', ['supportOffset' => 'bottom-24'])
+@include('partials.toast')
+@include('partials.push')
+@stack('scripts')
 </body>
 </html>

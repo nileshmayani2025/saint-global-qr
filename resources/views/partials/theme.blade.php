@@ -4,7 +4,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
 <style>
     :root{
-        --bg:#eaf0f7; --panel:#ffffff; --panel-2:#f7fafd;
+        --bg:#eaf0f7; --panel:#ffffff; --panel-2:#f7fafd; --panel-solid:#ffffff;
         --border:rgba(12,42,64,.09); --text:#102636; --muted:#5f7488;
         --teal:#2ca0d4; --teal-deep:#1b5a7c; --gold:#d9b25f;
         --ring:rgba(44,160,212,.30); --shadow:0 10px 34px -14px rgba(9,45,74,.28);
@@ -12,6 +12,8 @@
     }
     .dark{
         --bg:#060a12; --panel:rgba(255,255,255,.04); --panel-2:rgba(255,255,255,.02);
+        /* Matches the Select2 dropdown fill so every popover reads the same. */
+        --panel-solid:#0e1a2b;
         --border:rgba(255,255,255,.08); --text:#e8eff7; --muted:#93a5b9;
         --ring:rgba(44,160,212,.40); --shadow:0 18px 48px -18px rgba(0,0,0,.7); --shadow-sm:0 6px 20px -8px rgba(0,0,0,.5);
     }
@@ -39,6 +41,19 @@
         position:relative;
         transition:transform .28s cubic-bezier(.2,.7,.3,1), box-shadow .28s, border-color .28s;
     }
+    /* .lux-card needs position:relative for its ::before sheen, but this block
+       is inlined after Tailwind's utility sheet, so it was also beating
+       `absolute` on cards used as dropdown panels — they fell back into flow
+       and rendered over the topbar. Re-assert the utilities here. */
+    .lux-card.absolute{ position:absolute; }
+    .lux-card.fixed{ position:fixed; }
+    .lux-card.sticky{ position:sticky; }
+
+    /* Dropdown/popover panels. The translucent .lux-card fill is designed to sit
+       on the page background; over live content it lets text bleed through, so
+       popovers get an opaque surface and a stacking order of their own. */
+    .lux-card.lux-pop{ background:var(--panel-solid); z-index:50; }
+
     .lux-card::before{
         content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
         background:linear-gradient(180deg, rgba(255,255,255,.35), transparent 42%);

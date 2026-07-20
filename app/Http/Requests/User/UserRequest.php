@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests\User;
 
+use App\Http\Requests\Concerns\ValidatesLocation;
 use App\Support\Access\AccessControl;
 use App\Support\Phone;
 use Illuminate\Foundation\Http\FormRequest;
@@ -11,6 +12,8 @@ use Illuminate\Validation\Rule;
 
 class UserRequest extends FormRequest
 {
+    use ValidatesLocation;
+
     public function authorize(): bool
     {
         return $this->user() !== null;
@@ -45,6 +48,7 @@ class UserRequest extends FormRequest
         $userId = $this->route('user')?->id;
 
         return [
+            ...$this->locationRules(),
             'name' => ['required', 'string', 'max:255'],
             // The mobile number is the login identity, so it is required and
             // unique. Email is optional — OTP sign-in never reads it.
@@ -69,6 +73,7 @@ class UserRequest extends FormRequest
     public function messages(): array
     {
         return [
+            ...$this->locationMessages(),
             'phone.regex' => __('Enter a valid 10-digit mobile number.'),
         ];
     }

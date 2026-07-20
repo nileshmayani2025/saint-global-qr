@@ -5,12 +5,24 @@ declare(strict_types=1);
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\OtpController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\BusinessCard\BusinessCardController;
+use App\Http\Controllers\BusinessCard\MyBusinessCardController;
+use App\Http\Controllers\BusinessCard\PublicCardController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Geo\CityController;
+use App\Http\Controllers\Geo\CountryController;
+use App\Http\Controllers\Geo\StateController;
+use App\Http\Controllers\Lead\LeadController;
 use App\Http\Controllers\Marketing\BannerController;
+use App\Http\Controllers\Notification\MyNotificationController;
+use App\Http\Controllers\Notification\PushNotificationController;
+use App\Http\Controllers\Notification\PushSubscriptionController;
 use App\Http\Controllers\Product\BatchController;
 use App\Http\Controllers\Product\BrandController;
 use App\Http\Controllers\Product\CategoryController;
 use App\Http\Controllers\Product\ProductController;
+use App\Http\Controllers\Product\TradingVideoController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Qr\QrCodeController;
 use App\Http\Controllers\Rewards\MyRewardController;
 use App\Http\Controllers\Rewards\RedemptionController;
@@ -60,6 +72,18 @@ Route::post('verify', [PublicVerificationController::class, 'verify'])->name('ve
 Route::get('verify/{code}', [PublicVerificationController::class, 'show'])
     ->where('code', '.*')
     ->name('verify.show');
+
+/*
+|--------------------------------------------------------------------------
+| Public digital business cards
+|--------------------------------------------------------------------------
+| Open by design — the owner hands the link to a customer. The slug is a
+| 20-character random string so cards cannot be guessed or enumerated, and
+| PublicCardController 404s anything inactive.
+*/
+Route::get('c/{slug}', [PublicCardController::class, 'show'])->name('card.show');
+Route::get('c/{slug}/vcf', [PublicCardController::class, 'vcard'])->name('card.vcf');
+Route::get('c/{slug}/qr.png', [PublicCardController::class, 'qr'])->name('card.qr');
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +138,25 @@ Route::get('manifest.webmanifest', function () {
     ], options: JSON_UNESCAPED_SLASHES)->header('Content-Type', 'application/manifest+json');
 })->name('manifest');
 
+/*
+|--------------------------------------------------------------------------
+| Firebase messaging service worker
+|--------------------------------------------------------------------------
+| Served through Laravel rather than as a static public/ file so the Firebase
+| web config comes from .env instead of being hard-coded. A service worker can
+| only control pages at or below its own path, and this route sits at the app
+| root — on live that is /qr/public/, which is exactly the app's scope.
+*/
+Route::get('firebase-messaging-sw.js', function () {
+    $config = array_filter(config('services.firebase.web', []));
+
+    return response()
+        ->view('push.service-worker', ['config' => $config])
+        ->header('Content-Type', 'application/javascript')
+        ->header('Service-Worker-Allowed', '/')
+        ->header('Cache-Control', 'no-cache');
+})->name('push.service-worker');
+
 Route::get('/', fn () => redirect()->route(auth()->check() ? 'dashboard' : 'login'));
 
 /*
@@ -132,9 +175,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('products', ProductController::class);
     Route::resource('brands', BrandController::class)->except('show');
     Route::resource('categories', CategoryController::class)->except('show');
+    Route::resource('trading-videos', TradingVideoController::class)->except('show');
 
     // Home-carousel banners for the consumer app
     Route::resource('banners', BannerController::class)->except('show');
+
+    // Geography masters — global reference data used by user addresses.
+    Route::resource('countries', CountryController::class)->except('show');
+    Route::resource('states', StateController::class)->except('show');
+    Route::resource('cities', CityController::class)->except('show');
 
     // Batches + QR generation
     Route::resource('batches', BatchController::class);
@@ -156,9 +205,50 @@ Route::middleware('auth')->group(function () {
     Route::post('redemptions/{redemption}/approve', [RedemptionController::class, 'approve'])->name('redemptions.approve');
     Route::post('redemptions/{redemption}/reject', [RedemptionController::class, 'reject'])->name('redemptions.reject');
 
+    // Push notification campaigns (admin)
+    Route::resource('push-notifications', PushNotificationController::class);
+    Route::post('push-notifications/{pushNotification}/send', [PushNotificationController::class, 'send'])
+        ->name('push-notifications.send');
+
+    // Lead generation
+    Route::resource('leads', LeadController::class);
+
+    // Digital business cards — admin oversight of everyone's card.
+    Route::get('business-cards', [BusinessCardController::class, 'index'])->name('business-cards.index');
+    Route::post('business-cards/{businessCard}/toggle', [BusinessCardController::class, 'toggle'])->name('business-cards.toggle');
+    Route::post('business-cards/{businessCard}/regenerate', [BusinessCardController::class, 'regenerate'])->name('business-cards.regenerate');
+    Route::delete('business-cards/{businessCard}', [BusinessCardController::class, 'destroy'])->name('business-cards.destroy');
+
     // Users + Roles
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class)->except('show');
+
+    // The signed-in user's own profile. Open to every authenticated account —
+    // it only ever reads and writes the caller's own row, so it is deliberately
+    // not gated behind the users.* permissions.
+    Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('profile/support-contacts', [ProfileController::class, 'updateSupportContacts'])
+        ->name('profile.support-contacts');
+
+    // The signed-in user's own digital business card.
+    Route::get('my/business-card', [MyBusinessCardController::class, 'edit'])->name('my.business-card.edit');
+    Route::put('my/business-card', [MyBusinessCardController::class, 'update'])->name('my.business-card.update');
+    Route::post('my/business-card/regenerate', [MyBusinessCardController::class, 'regenerate'])->name('my.business-card.regenerate');
+
+    // Dismisses the welcome video popup. Every signed-in user needs this — it
+    // only writes a watermark on their own row — so it lives here rather than
+    // behind the trading-videos.* admin permissions.
+    Route::post('my/trading-video/{tradingVideo}/seen', [TradingVideoController::class, 'markSeen'])
+        ->name('my.trading-video.seen');
+
+    // The signed-in user's notification inbox (the topbar bell) and the FCM
+    // token registration the browser calls after permission is granted.
+    Route::get('my/notifications', [MyNotificationController::class, 'index'])->name('my.notifications');
+    Route::post('my/notifications/read-all', [MyNotificationController::class, 'readAll'])->name('my.notifications.read-all');
+    Route::get('my/notifications/{recipient}', [MyNotificationController::class, 'read'])->name('my.notifications.read');
+    Route::post('push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+    Route::post('push/unsubscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
 
     // The signed-in user's own rewards area
     Route::get('my/scans', [MyRewardController::class, 'scans'])->name('my.scans');

@@ -11,6 +11,9 @@
 @endphp
 
 @section('content')
+    {{-- Shown over the home screen on first open, and again after a new video. --}}
+    @include('partials.trading-video-popup')
+
     {{-- Banner carousel --}}
     @if ($banners->isNotEmpty())
         <div x-data="{

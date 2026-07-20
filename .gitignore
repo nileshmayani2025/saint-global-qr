@@ -20,6 +20,15 @@
 /public/storage
 /storage/*.key
 /storage/pail
+# Firebase service-account credentials — private key, never commit.
+/storage/app/firebase
+
+# Runtime caches — regenerated on every request, must never be committed.
+/storage/framework/cache/data
+/storage/framework/sessions
+/storage/framework/testing
+/storage/framework/views
+/storage/logs
 /vendor
 Homestead.json
 Homestead.yaml

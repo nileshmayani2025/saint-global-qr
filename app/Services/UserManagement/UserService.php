@@ -86,7 +86,7 @@ class UserService
      */
     private function fillable(array $data, bool $isCreate): array
     {
-        return array_filter([
+        $attributes = array_filter([
             'name' => $data['name'] ?? null,
             'email' => $data['email'] ?? null,
             'phone' => $data['phone'] ?? null,
@@ -96,5 +96,16 @@ class UserService
             // on every create path so the column never reads as "pending".
             'approved_at' => $isCreate ? now() : null,
         ], static fn ($v) => $v !== null);
+
+        // Location is optional and clearable, so a null has to be written
+        // through rather than dropped by the filter above — otherwise a user
+        // could never unset a country they picked by mistake.
+        foreach (['country_id', 'state_id', 'city_id', 'address'] as $key) {
+            if (array_key_exists($key, $data)) {
+                $attributes[$key] = $data[$key];
+            }
+        }
+
+        return $attributes;
     }
 }
