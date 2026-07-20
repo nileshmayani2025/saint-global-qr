@@ -22,6 +22,9 @@
 /storage/pail
 # Firebase service-account credentials — private key, never commit.
 /storage/app/firebase
+# Runtime uploads and generated QR images. The 60 demo PNGs already committed
+# before this rule are left tracked on purpose; nothing new should join them.
+/storage/app/public
 
 # Runtime caches — regenerated on every request, must never be committed.
 /storage/framework/cache/data
