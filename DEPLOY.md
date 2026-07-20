@@ -34,40 +34,87 @@ php artisan migrate --force
 # One-time: public storage symlink (app already has a /media fallback route)
 php artisan storage:link
 
-# Cache config, routes, views + optimize
-php artisan optimize
+# Cache config, events and views — but NOT routes. See the warning below.
+php artisan optimize --except=routes
 ```
 
 To redeploy after code changes: `git pull` → repeat `npm run build` →
-`php artisan optimize:clear && php artisan optimize`.
+`php artisan optimize:clear && php artisan optimize --except=routes`.
 
-> **Always run `optimize:clear` BEFORE `optimize`.** Running `optimize` on its
-> own leaves the previous `bootstrap/cache/routes-v7.php` in place, and a route
-> cache built from older code is what produces errors like
-> *"The GET method is not supported for route /. Supported methods: HEAD."* —
-> the compiled route table no longer matches `routes/web.php`.
+> ### ⚠️ Never cache routes while the app lives in a subdirectory
+>
+> This install is served from `/qr/public`, not from a domain root. Caching
+> routes in that setup **breaks the home page** with:
+>
+> *"The GET method is not supported for route /. Supported methods: HEAD."*
+>
+> It is not a stale cache — a freshly built one does it too. `CompiledRouteCollection`
+> strips the trailing slash from the request before matching, so `/qr/public/`
+> becomes `/qr/public`, which is exactly the base path. Symfony then reads the
+> base path as empty and looks for a route literally named `qr/public`, finds
+> nothing, and the fallback reports `Allow: HEAD`. Only the `/` route is
+> affected; every other URL still resolves.
+>
+> `--except=routes` keeps the config, event and view caches (nearly all of the
+> speed) and skips the one that breaks. Reproduced and verified both ways.
+>
+> The real cure is to stop serving from a subdirectory: point the domain or a
+> subdomain's document root straight at `public/`. Route caching is then safe
+> and you can drop the flag.
 
 ### After running migrations that add permissions
 
-New modules register their permissions through `AccessControl::catalogue()`, so
-re-run the (idempotent) seeder or nobody but the super-admin can see them:
+New modules add entries to `AccessControl::catalogue()`. Until those rows exist
+the Roles screen cannot list them, so nobody can be granted the new modules:
 
 ```bash
-php artisan db:seed --class=RolePermissionSeeder --force
+php artisan permissions:sync            # adds missing permissions, grants nothing
 php artisan db:seed --class=GeographySeeder --force   # India country/state/city origin data
 ```
 
-## Troubleshooting: 405 "Method Not Allowed" on a page that used to work
+`permissions:sync` is purely additive and safe on a live site. The Roles screen
+also detects the gap and offers the same action as a button, so shell access is
+not required. Add `--grant` only on a fresh install that wants the default
+role → permission map.
 
-Almost always a stale compiled cache rather than a code bug. On the live server:
+**Do not run `RolePermissionSeeder` on a live site** — it calls
+`syncPermissions()`, which resets every role to its defaults and discards any
+tuning done through the Roles screen.
+
+## Troubleshooting
+
+### 405 "The GET method is not supported for route /"
+
+The route cache. See the warning above — it is not staleness, it is route
+caching plus the `/qr/public` subdirectory. Fix:
+
+```bash
+php artisan route:clear
+```
+
+and from then on deploy with `php artisan optimize --except=routes`.
+
+### "Route [x.index] not defined" after adding a module
+
+A genuinely stale route cache this time: the new code is on disk but the
+compiled table predates it.
 
 ```bash
 php artisan optimize:clear
-php artisan optimize
+php artisan optimize --except=routes
 ```
 
-If it persists, PHP's OPcache is still serving the old compiled cache files from
-memory. Restart PHP-FPM (or the account's PHP process in cPanel), or add
+### A new module does not appear in any menu
+
+Its permissions have no rows yet, so nobody holds them. Open **Roles** — a
+banner lists what is missing with a button to add it — or run
+`php artisan permissions:sync`. Then grant them to the roles that should have
+them; nothing is granted automatically.
+
+### Changes deployed but the site still behaves as before
+
+PHP's OPcache is serving the previous compiled files from memory. Restart
+PHP-FPM (or the account's PHP process in cPanel), or set
 `opcache.validate_timestamps=1` so changed files are picked up automatically.
 
 ## 3. Firebase push notifications (one-time setup)
