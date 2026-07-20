@@ -38,12 +38,16 @@ final class PermissionSynchroniser
     }
 
     /**
-     * Create the missing permissions and, optionally, grant the new ones to the
-     * roles that hold them by default.
+     * Create the missing permissions.
+     *
+     * Granting is off by default and deliberately so: a new module must not
+     * silently widen anyone's access. The permissions become visible on the
+     * Roles screen and an admin decides who gets them. Pass $grant only for a
+     * fresh install that needs sensible starting defaults.
      *
      * @return array{created: list<string>, granted: array<string, int>}
      */
-    public static function sync(bool $grant = true): array
+    public static function sync(bool $grant = false): array
     {
         $missing = self::missing();
         $granted = [];

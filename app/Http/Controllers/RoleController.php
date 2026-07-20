@@ -56,10 +56,11 @@ class RoleController extends Controller
             return back()->with('info', 'Permissions were already up to date.');
         }
 
+        // Created but granted to nobody — assigning them is a decision, not a
+        // side effect of deploying a module.
         return back()->with('success', sprintf(
-            '%d permission(s) added: %s',
+            '%d permission(s) added. Open a role below to grant them.',
             count($result['created']),
-            implode(', ', $result['created']),
         ));
     }
 

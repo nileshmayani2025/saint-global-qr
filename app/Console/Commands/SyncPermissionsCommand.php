@@ -23,10 +23,10 @@ use Spatie\Permission\Models\Permission;
 class SyncPermissionsCommand extends Command
 {
     protected $signature = 'permissions:sync
-                            {--no-grant : Create the permissions but do not grant them to any role}
+                            {--grant : Also grant the new permissions to their default roles (off by default)}
                             {--dry-run : Show what would change without writing}';
 
-    protected $description = 'Add any missing permissions from the catalogue without resetting existing role assignments';
+    protected $description = 'Add missing catalogue permissions. Grants nothing unless --grant is passed';
 
     public function handle(): int
     {
@@ -49,13 +49,17 @@ class SyncPermissionsCommand extends Command
             return self::SUCCESS;
         }
 
-        $result = PermissionSynchroniser::sync(grant: ! $this->option('no-grant'));
+        $result = PermissionSynchroniser::sync(grant: (bool) $this->option('grant'));
 
         foreach ($result['granted'] as $role => $count) {
             $this->line("  {$role}: +{$count}");
         }
 
-        $this->info(sprintf('Created %d permission(s). No existing role assignment was changed.', count($result['created'])));
+        $this->info(sprintf('Created %d permission(s).', count($result['created'])));
+
+        if ($result['granted'] === []) {
+            $this->comment('Granted to nobody — assign them from the Roles screen.');
+        }
 
         return self::SUCCESS;
     }

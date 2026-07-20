@@ -1,7 +1,24 @@
-@extends('layouts.guest')
+@php
+    $rewardPoints = (int) ($result->verification?->reward_points ?? 0);
+
+    // A signed-in user who just earned points gets the celebration; everyone
+    // else — guests verifying a pack, duplicate scans, failures — gets the
+    // plain result card below.
+    $celebrate = auth()->check() && $result->genuine && $result->isValid() && $rewardPoints > 0;
+@endphp
+
+{{-- Signed-in scans come from the app, so they keep the app shell and its
+     bottom nav instead of dropping into the bare guest page. --}}
+@extends(auth()->check() ? 'layouts.consumer' : 'layouts.guest')
 @section('title', 'Verification result')
 
 @section('content')
+    @if ($celebrate)
+        @include('partials.scan-reward', [
+            'points' => $rewardPoints,
+            'productName' => $result->qrCode?->product?->name,
+        ])
+    @else
     @php
         $genuine = $result->genuine && $result->isValid();
         $duplicate = $result->isDuplicate();
@@ -49,4 +66,5 @@
     @endif
 
     <a href="{{ route('verify.form') }}" class="mt-6 block text-center rounded-lg border border-slate-300 dark:border-slate-700 px-4 py-3 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Verify another product</a>
+    @endif
 @endsection

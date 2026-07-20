@@ -24,7 +24,8 @@
                             <button class="rounded-lg lux-btn text-white text-sm font-medium px-4 py-2">Add missing permissions</button>
                         </form>
                         <p class="mt-2 text-xs text-[var(--muted)]">
-                            Only adds — no existing role assignment is changed.
+                            Adds them to the list only — nobody is granted anything.
+                            Open each role below and tick what it should have.
                         </p>
                     @endcan
                 </div>
