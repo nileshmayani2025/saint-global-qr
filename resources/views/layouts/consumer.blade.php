@@ -59,11 +59,42 @@
                     {{ strtoupper(substr($user->name, 0, 1)) }}
                 </button>
                 <div x-show="open" x-cloak x-transition @click.outside="open = false"
-                     class="lux-card absolute right-0 mt-2 w-56 py-2 text-sm z-30">
+                     class="lux-card lux-pop absolute right-0 mt-2 w-60 max-w-[calc(100vw_-_2rem)] py-2 text-sm z-30">
                     <div class="px-4 py-2 border-b border-[var(--border)]">
                         <div class="font-semibold truncate">{{ $user->name }}</div>
                         <div class="text-xs text-[var(--muted)]">+91 {{ \App\Support\Phone::format($user->phone) }}</div>
                     </div>
+
+                    {{-- The app shell has no sidebar, so everything a user can
+                         reach beyond the four bottom tabs lives in here. --}}
+                    <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Profile</a>
+                    <a href="{{ route('my.business-card.edit') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Business Card</a>
+                    <a href="{{ route('my.notifications') }}" class="flex items-center justify-between gap-2 px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">
+                        <span>Notifications</span>
+                        @php $unread = $user->unreadNotificationCount(); @endphp
+                        @if ($unread > 0)
+                            <span class="min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-rose-500 text-white text-[10px] font-bold">{{ $unread > 9 ? '9+' : $unread }}</span>
+                        @endif
+                    </a>
+
+                    {{-- Staff modules a user may hold permission for while still
+                         landing in the app shell (a lead-capturing salesman is
+                         not a "consumer" by permission, but has no sidebar). --}}
+                    @php
+                        $appModules = array_filter([
+                            ['route' => 'leads.index', 'label' => 'Leads', 'perm' => 'leads.view'],
+                            ['route' => 'trading-videos.index', 'label' => 'Trading Videos', 'perm' => 'trading-videos.view'],
+                            ['route' => 'push-notifications.index', 'label' => 'Send Notification', 'perm' => 'notifications.view'],
+                        ], fn ($m) => $user->can($m['perm']));
+                    @endphp
+                    @if ($appModules !== [])
+                        <div class="my-1 border-t border-[var(--border)]"></div>
+                        @foreach ($appModules as $m)
+                            <a href="{{ route($m['route']) }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">{{ $m['label'] }}</a>
+                        @endforeach
+                    @endif
+
+                    <div class="my-1 border-t border-[var(--border)]"></div>
                     <button @click="dark = !dark" class="w-full text-left px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">
                         <span x-show="!dark">Dark theme</span><span x-show="dark" x-cloak>Light theme</span>
                     </button>

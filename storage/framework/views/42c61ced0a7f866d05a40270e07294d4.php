@@ -57,11 +57,39 @@
 
                 </button>
                 <div x-show="open" x-cloak x-transition @click.outside="open = false"
-                     class="lux-card absolute right-0 mt-2 w-56 py-2 text-sm z-30">
+                     class="lux-card lux-pop absolute right-0 mt-2 w-60 max-w-[calc(100vw_-_2rem)] py-2 text-sm z-30">
                     <div class="px-4 py-2 border-b border-[var(--border)]">
                         <div class="font-semibold truncate"><?php echo e($user->name); ?></div>
                         <div class="text-xs text-[var(--muted)]">+91 <?php echo e(\App\Support\Phone::format($user->phone)); ?></div>
                     </div>
+
+                    
+                    <a href="<?php echo e(route('profile.edit')); ?>" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Profile</a>
+                    <a href="<?php echo e(route('my.business-card.edit')); ?>" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Business Card</a>
+                    <a href="<?php echo e(route('my.notifications')); ?>" class="flex items-center justify-between gap-2 px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">
+                        <span>Notifications</span>
+                        <?php $unread = $user->unreadNotificationCount(); ?>
+                        <?php if($unread > 0): ?>
+                            <span class="min-w-[18px] h-[18px] px-1 grid place-items-center rounded-full bg-rose-500 text-white text-[10px] font-bold"><?php echo e($unread > 9 ? '9+' : $unread); ?></span>
+                        <?php endif; ?>
+                    </a>
+
+                    
+                    <?php
+                        $appModules = array_filter([
+                            ['route' => 'leads.index', 'label' => 'Leads', 'perm' => 'leads.view'],
+                            ['route' => 'trading-videos.index', 'label' => 'Trading Videos', 'perm' => 'trading-videos.view'],
+                            ['route' => 'push-notifications.index', 'label' => 'Send Notification', 'perm' => 'notifications.view'],
+                        ], fn ($m) => $user->can($m['perm']));
+                    ?>
+                    <?php if($appModules !== []): ?>
+                        <div class="my-1 border-t border-[var(--border)]"></div>
+                        <?php $__currentLoopData = $appModules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $m): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <a href="<?php echo e(route($m['route'])); ?>" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5"><?php echo e($m['label']); ?></a>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+
+                    <div class="my-1 border-t border-[var(--border)]"></div>
                     <button @click="dark = !dark" class="w-full text-left px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">
                         <span x-show="!dark">Dark theme</span><span x-show="dark" x-cloak>Light theme</span>
                     </button>
