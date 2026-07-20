@@ -8,6 +8,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\BusinessCard\BusinessCardController;
 use App\Http\Controllers\BusinessCard\MyBusinessCardController;
 use App\Http\Controllers\BusinessCard\PublicCardController;
+use App\Http\Controllers\Consumer\MyLeadController;
+use App\Http\Controllers\Consumer\MyVideoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Geo\CityController;
 use App\Http\Controllers\Geo\CountryController;
@@ -222,6 +224,10 @@ Route::middleware('auth')->group(function () {
     // Users + Roles
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class)->except('show');
+    // Creates catalogue permissions missing from the database, so a deploy that
+    // added modules can be completed without shell access.
+    Route::post('roles/sync-permissions', [RoleController::class, 'syncPermissions'])
+        ->name('roles.sync-permissions');
 
     // The signed-in user's own profile. Open to every authenticated account —
     // it only ever reads and writes the caller's own row, so it is deliberately
@@ -230,6 +236,14 @@ Route::middleware('auth')->group(function () {
     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('profile/support-contacts', [ProfileController::class, 'updateSupportContacts'])
         ->name('profile.support-contacts');
+
+    // App-facing screens: watching product videos and capturing leads are open
+    // to every signed-in user, unlike the staff modules behind
+    // trading-videos.* and leads.* which manage the same data.
+    Route::get('my/videos', [MyVideoController::class, 'index'])->name('my.videos');
+    Route::get('my/leads', [MyLeadController::class, 'index'])->name('my.leads.index');
+    Route::get('my/leads/create', [MyLeadController::class, 'create'])->name('my.leads.create');
+    Route::post('my/leads', [MyLeadController::class, 'store'])->name('my.leads.store');
 
     // The signed-in user's own digital business card.
     Route::get('my/business-card', [MyBusinessCardController::class, 'edit'])->name('my.business-card.edit');

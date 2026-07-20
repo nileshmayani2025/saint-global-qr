@@ -5,11 +5,9 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Support\Access\AccessControl;
+use App\Support\Access\PermissionSynchroniser;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\PermissionRegistrar;
 
 /**
  * The safe way to roll new permissions onto a live install.
@@ -17,17 +15,15 @@ use Spatie\Permission\PermissionRegistrar;
  * RolePermissionSeeder is destructive by design: it prunes anything outside the
  * catalogue and calls syncPermissions(), which resets every role to its default
  * set. That is right for a fresh database and wrong for a running site where an
- * admin has tuned roles by hand.
+ * admin has tuned roles by hand. This only ever adds.
  *
- * This command only ever adds:
- *   - creates catalogue permissions that do not exist yet
- *   - grants the brand-new ones to the roles that should have them by default
- *   - never deletes a permission, never revokes an existing assignment
+ * The same logic is reachable from the Roles screen, so an admin without shell
+ * access is not stuck.
  */
 class SyncPermissionsCommand extends Command
 {
     protected $signature = 'permissions:sync
-                            {--grant : Also grant the newly created permissions to their default roles}
+                            {--no-grant : Create the permissions but do not grant them to any role}
                             {--dry-run : Show what would change without writing}';
 
     protected $description = 'Add any missing permissions from the catalogue without resetting existing role assignments';
@@ -35,21 +31,17 @@ class SyncPermissionsCommand extends Command
     public function handle(): int
     {
         $catalogue = AccessControl::permissions();
-        $existing = Permission::query()->pluck('name')->all();
-        $missing = array_values(array_diff($catalogue, $existing));
-        $extra = array_values(array_diff($existing, $catalogue));
+        $missing = PermissionSynchroniser::missing();
 
-        $this->info(sprintf('Catalogue: %d · in database: %d', count($catalogue), count($existing)));
+        $this->info(sprintf('Catalogue: %d · in database: %d', count($catalogue), Permission::query()->count()));
 
         if ($missing === []) {
             $this->line('  Nothing to add — every catalogue permission already exists.');
-        } else {
-            $this->line('  To add: '.implode(', ', $missing));
+
+            return self::SUCCESS;
         }
 
-        if ($extra !== []) {
-            $this->warn('  Present but not in the catalogue (left untouched): '.implode(', ', $extra));
-        }
+        $this->line('  To add: '.implode(', ', $missing));
 
         if ($this->option('dry-run')) {
             $this->comment('Dry run — nothing was written.');
@@ -57,42 +49,13 @@ class SyncPermissionsCommand extends Command
             return self::SUCCESS;
         }
 
-        if ($missing === [] && ! $this->option('grant')) {
-            return self::SUCCESS;
+        $result = PermissionSynchroniser::sync(grant: ! $this->option('no-grant'));
+
+        foreach ($result['granted'] as $role => $count) {
+            $this->line("  {$role}: +{$count}");
         }
 
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
-
-        DB::transaction(function () use ($missing): void {
-            foreach ($missing as $permission) {
-                Permission::findOrCreate($permission, 'web');
-            }
-
-            foreach (AccessControl::roles() as $role) {
-                Role::findOrCreate($role, 'web');
-            }
-
-            if (! $this->option('grant')) {
-                return;
-            }
-
-            // givePermissionTo adds without touching what a role already holds,
-            // unlike syncPermissions which replaces the whole set.
-            foreach (AccessControl::rolePermissions() as $roleName => $defaults) {
-                $grant = array_intersect($defaults, $missing);
-
-                if ($grant === []) {
-                    continue;
-                }
-
-                Role::findByName($roleName, 'web')->givePermissionTo($grant);
-                $this->line("  {$roleName}: +".count($grant));
-            }
-        });
-
-        app(PermissionRegistrar::class)->forgetCachedPermissions();
-
-        $this->info('Done. No existing role assignment was changed.');
+        $this->info(sprintf('Created %d permission(s). No existing role assignment was changed.', count($result['created'])));
 
         return self::SUCCESS;
     }

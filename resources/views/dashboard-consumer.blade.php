@@ -7,6 +7,8 @@
         ['route' => 'my.scans',    'label' => 'Product<br>History',    'icon' => 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'],
         ['route' => 'my.rewards',  'label' => 'Rewards<br>History',    'icon' => 'M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zM5 12h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7'],
         ['route' => 'verify.form', 'label' => 'Enter<br>Code',         'icon' => 'M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z'],
+        ['route' => 'my.videos',   'label' => 'Product<br>Videos',     'icon' => 'M14.75 11.17l-3.2-2.13A1 1 0 0010 9.87v4.26a1 1 0 001.55.83l3.2-2.13a1 1 0 000-1.66zM21 12a9 9 0 11-18 0 9 9 0 0118 0z'],
+        ['route' => 'my.leads.index', 'label' => 'Add<br>Lead',        'icon' => 'M16 8a3 3 0 11-6 0 3 3 0 016 0zm-3 5a6 6 0 00-6 6h12a6 6 0 00-6-6zM19 8h4m-2-2v4'],
     ];
 @endphp
 

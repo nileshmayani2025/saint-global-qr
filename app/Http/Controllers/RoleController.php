@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Support\Access\PermissionSynchroniser;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
@@ -28,7 +29,38 @@ class RoleController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        return view('roles.index', ['roles' => $roles]);
+        return view('roles.index', [
+            'roles' => $roles,
+            // A deploy that adds modules but never syncs leaves catalogue
+            // entries with no row in the permissions table. The Roles screen
+            // lists from that table, so those modules are invisible here and
+            // cannot be granted to anyone — surface it rather than let an
+            // admin wonder why the new module never appears.
+            'missingPermissions' => PermissionSynchroniser::missing(),
+        ]);
+    }
+
+    /**
+     * Create any catalogue permissions missing from the database.
+     *
+     * Purely additive — see PermissionSynchroniser. Exposed here so an admin
+     * without shell access is not stuck waiting on a deploy.
+     */
+    public function syncPermissions(): RedirectResponse
+    {
+        $this->authorize('create', Role::class);
+
+        $result = PermissionSynchroniser::sync();
+
+        if ($result['created'] === []) {
+            return back()->with('info', 'Permissions were already up to date.');
+        }
+
+        return back()->with('success', sprintf(
+            '%d permission(s) added: %s',
+            count($result['created']),
+            implode(', ', $result['created']),
+        ));
     }
 
     public function create(): View

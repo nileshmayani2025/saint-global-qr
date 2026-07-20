@@ -67,6 +67,8 @@
 
                     {{-- The app shell has no sidebar, so everything a user can
                          reach beyond the four bottom tabs lives in here. --}}
+                    <a href="{{ route('my.videos') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">Product Videos</a>
+                    <a href="{{ route('my.leads.index') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Leads</a>
                     <a href="{{ route('profile.edit') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Profile</a>
                     <a href="{{ route('my.business-card.edit') }}" class="block px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">My Business Card</a>
                     <a href="{{ route('my.notifications') }}" class="flex items-center justify-between gap-2 px-4 py-2.5 hover:bg-black/5 dark:hover:bg-white/5">
